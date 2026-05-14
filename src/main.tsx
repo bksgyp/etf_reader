@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { Filter, RefreshCw, Search, X } from "lucide-react";
 import etfs from "./data/etfs.json";
 import holdings from "./data/etf_holdings.json";
-import type { Etf, EtfHolding, EtfHoldingPayload, EtfPrice, EtfPriceResponse } from "./types";
+import type { Etf, EtfHolding, EtfHoldingPayload, EtfPrice } from "./types";
 import "./styles.css";
 
 const typedEtfs = etfs as Etf[];
@@ -32,6 +32,22 @@ const pageSize = 20;
 const nameCollator = new Intl.Collator("ko-KR", { numeric: true, sensitivity: "base" });
 const emptyColumnFilters = Object.fromEntries(filterKeys.map((key) => [key, ""])) as ColumnFilters;
 const holdingsByEtfCode = Object.fromEntries(typedHoldings.etfs.map((etf) => [etf.etfCode, etf.holdings]));
+const dummyPrice: EtfPrice = {
+  basDd: "20260514",
+  code: "",
+  name: "",
+  close: "10000",
+  change: "0",
+  changeRate: "0.00",
+  nav: "10000",
+  open: "10000",
+  high: "10000",
+  low: "10000",
+  volume: "0",
+  tradingValue: "0",
+  marketCap: "0",
+  netAssets: "0",
+};
 
 function normalize(value: string) {
   return value.trim().toLocaleLowerCase("ko-KR");
@@ -213,7 +229,7 @@ function App() {
   const paginationItems = getPaginationItems(currentPage, totalPages);
   const hasColumnFilters = Object.values(columnFilters).some((filter) => filter.trim());
 
-  async function loadPrice(etf: Etf, forceRefresh = false) {
+  function loadPrice(etf: Etf, forceRefresh = false) {
     if (!forceRefresh && (prices[etf.단축코드] || prices[etf.표준코드])) {
       return;
     }
@@ -221,37 +237,24 @@ function App() {
     setLoadingCode(etf.단축코드);
     setPriceError("");
 
-    try {
-      const searchParams = new URLSearchParams({ codes: etf.단축코드 });
+    const price = {
+      ...dummyPrice,
+      code: etf.단축코드,
+      name: etf.한글종목약명,
+    };
 
-      if (forceRefresh) {
-        searchParams.set("refresh", String(Date.now()));
-      }
-
-      const response = await fetch(`/api/etf-prices?${searchParams.toString()}`);
-
-      if (!response.ok) {
-        const body = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(body?.error ?? "ETF 가격 정보를 불러오지 못했습니다.");
-      }
-
-      const data = (await response.json()) as EtfPriceResponse;
-      setPrices((currentPrices) => ({ ...currentPrices, ...data.prices }));
-
-      if (data.failures?.length) {
-        setPriceError(`${etf.한글종목약명} 시세를 불러오지 못했습니다.`);
-      }
-    } catch (error) {
-      setPriceError(error instanceof Error ? error.message : "ETF 가격 정보를 불러오지 못했습니다.");
-    } finally {
-      setLoadingCode("");
-    }
+    setPrices((currentPrices) => ({
+      ...currentPrices,
+      [etf.단축코드]: price,
+      [etf.표준코드]: price,
+    }));
+    setLoadingCode("");
   }
 
   function openPriceModal(etf: Etf) {
     setPriceError("");
     setSelectedEtf(etf);
-    void loadPrice(etf);
+    loadPrice(etf);
   }
 
   function closePriceModal() {
