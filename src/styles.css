@@ -21,6 +21,14 @@ input {
   font: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 .app {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
@@ -76,17 +84,56 @@ p {
   color: #17202a;
 }
 
+.resultBar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 .resultHeader {
   display: flex;
   gap: 6px;
   align-items: baseline;
-  margin-bottom: 10px;
   color: #4d5968;
 }
 
 .resultHeader strong {
   color: #17202a;
   font-size: 20px;
+}
+
+.refreshButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid #cbd3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #263445;
+  font-weight: 700;
+}
+
+.refreshButton:hover:not(:disabled) {
+  border-color: #93a4ba;
+  background: #f8fafc;
+}
+
+.refreshButton:disabled {
+  color: #8995a4;
+}
+
+.notice {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid #ffd6a8;
+  border-radius: 8px;
+  background: #fff8ef;
+  color: #7a4a12;
+  font-size: 14px;
 }
 
 .tableWrap {
@@ -98,7 +145,7 @@ p {
 
 table {
   width: 100%;
-  min-width: 920px;
+  min-width: 1250px;
   border-collapse: collapse;
 }
 
@@ -155,9 +202,34 @@ tbody tr:hover {
   font-weight: 700;
 }
 
+.numeric {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.positive {
+  color: #c2410c;
+  font-weight: 700;
+}
+
+.negative {
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.spinning {
+  animation: spin 0.8s linear infinite;
+}
+
 .empty {
   padding: 28px 16px;
   text-align: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 760px) {
@@ -177,5 +249,11 @@ tbody tr:hover {
 
   .searchBox {
     height: 46px;
+  }
+
+  .resultBar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
   }
 }

@@ -17,3 +17,26 @@ export type Etf = {
   총보수: string;
   과세유형: string;
 };
+
+export type EtfPrice = {
+  basDd: string;
+  code: string;
+  name: string;
+  close: string;
+  change: string;
+  changeRate: string;
+  nav: string;
+  open: string;
+  high: string;
+  low: string;
+  volume: string;
+  tradingValue: string;
+  marketCap: string;
+  netAssets: string;
+};
+
+export type EtfPriceResponse = {
+  basDd: string;
+  count: number;
+  prices: Record<string, EtfPrice>;
+};
