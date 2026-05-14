@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { parseCodes } from "../api/etf-prices.js";
 import { ETF_HEADERS, parseEtfMarkdown } from "../scripts/etf-parser.mjs";
 
 test("parses the ETF markdown table", async () => {
@@ -21,4 +22,8 @@ test("rejects rows with missing columns", () => {
   ].join("\n");
 
   assert.throws(() => parseEtfMarkdown(markdown), /expected 17/i);
+});
+
+test("parses numeric and alphanumeric ETF short codes", () => {
+  assert.deepEqual(parseCodes("495710,0120J0, 0001p0, invalid"), ["495710", "0120J0", "0001P0"]);
 });

@@ -11,15 +11,19 @@ function getKisDomain() {
   return process.env.KIS_ENV === "vts" ? KIS_VTS_DOMAIN : KIS_PROD_DOMAIN;
 }
 
-function parseCodes(value) {
+export function parseCodes(value) {
   if (typeof value !== "string") {
     return [];
   }
 
-  return [...new Set(value.split(",").map((code) => code.trim()).filter((code) => /^\d{6}$/.test(code)))].slice(
-    0,
-    MAX_CODES,
-  );
+  return [
+    ...new Set(
+      value
+        .split(",")
+        .map((code) => code.trim().toUpperCase())
+        .filter((code) => /^[0-9A-Z]{6}$/.test(code)),
+    ),
+  ].slice(0, MAX_CODES);
 }
 
 function wait(ms) {
