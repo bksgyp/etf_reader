@@ -1,0 +1,204 @@
+- main [ref=e3]:
+  - region "ETF 검색" [ref=e4]:
+    - generic [ref=e5]:
+      - heading "대한민국 ETF 검색" [level=1] [ref=e6]
+      - paragraph [ref=e7]: 1,107개 ETF를 시장, 운용사, 종목명으로 검색합니다.
+    - generic [ref=e8]:
+      - generic "검색 기준" [ref=e9]:
+        - combobox "검색 기준" [ref=e10]:
+          - option "시장"
+          - option "운용사"
+          - option "종목명" [selected]
+          - option "구성종목"
+      - generic [ref=e11]:
+        - img [ref=e12]
+        - searchbox "종목명 검색어" [ref=e15]
+  - generic [ref=e16]:
+    - generic [ref=e17]:
+      - strong [ref=e18]: "5"
+      - generic [ref=e19]: 개 검색 결과 (1-5번째 표시)
+    - button "필터 초기화" [ref=e385] [cursor=pointer]
+  - region "ETF 검색 결과" [ref=e20]:
+    - table [ref=e21]:
+      - rowgroup [ref=e22]:
+        - row "종목 종목 필터 열기 코드 코드 필터 열기 운용사 운용사 필터 열기 교보악사자산운용 대신자산운용 더제이자산운용 디비자산운용 마이다스에셋 미래에셋자산운용 브이아이자산운용 비엔케이자산운용 삼성액티브자산운용 삼성자산운용 신한자산운용 아이비케이자산운용 아이엠에셋자산운용 에셋플러스자산운용 엔에이치아문디자산운용 우리자산운용 유리에셋 케이비자산운용 케이씨지아이자산운용 키움투자자산운용 타임폴리오자산운용 트러스톤자산운용 하나자산운용 한국투자밸류자산운용 한국투자신탁운용 한화자산운용 현대자산운용 흥국자산운용 시장 시장 필터 열기 자산 자산 필터 열기 총보수 총보수 필터 열기 과세유형 과세유형 필터 열기" [ref=e298]:
+          - columnheader "종목 종목 필터 열기" [ref=e24]:
+            - generic [ref=e25]:
+              - generic [ref=e26]: 종목
+              - button "종목 필터 열기" [ref=e27] [cursor=pointer]:
+                - img [ref=e28]
+          - columnheader "코드 코드 필터 열기" [ref=e30]:
+            - generic [ref=e31]:
+              - generic [ref=e32]: 코드
+              - button "코드 필터 열기" [ref=e33] [cursor=pointer]:
+                - img [ref=e34]
+          - columnheader "운용사 운용사 필터 열기 교보악사자산운용 대신자산운용 더제이자산운용 디비자산운용 마이다스에셋 미래에셋자산운용 브이아이자산운용 비엔케이자산운용 삼성액티브자산운용 삼성자산운용 신한자산운용 아이비케이자산운용 아이엠에셋자산운용 에셋플러스자산운용 엔에이치아문디자산운용 우리자산운용 유리에셋 케이비자산운용 케이씨지아이자산운용 키움투자자산운용 타임폴리오자산운용 트러스톤자산운용 하나자산운용 한국투자밸류자산운용 한국투자신탁운용 한화자산운용 현대자산운용 흥국자산운용" [ref=e299]:
+            - generic [ref=e37]:
+              - generic [ref=e38]: 운용사
+              - button "운용사 필터 열기" [expanded] [ref=e39] [cursor=pointer]:
+                - img [ref=e40]
+              - generic [ref=e300]:
+                - generic [ref=e301] [cursor=pointer]:
+                  - checkbox "교보악사자산운용" [checked] [active] [ref=e302]
+                  - generic [ref=e303]: 교보악사자산운용
+                - generic [ref=e304] [cursor=pointer]:
+                  - checkbox "대신자산운용" [ref=e305]
+                  - generic [ref=e306]: 대신자산운용
+                - generic [ref=e307] [cursor=pointer]:
+                  - checkbox "더제이자산운용" [ref=e308]
+                  - generic [ref=e309]: 더제이자산운용
+                - generic [ref=e310] [cursor=pointer]:
+                  - checkbox "디비자산운용" [ref=e311]
+                  - generic [ref=e312]: 디비자산운용
+                - generic [ref=e313] [cursor=pointer]:
+                  - checkbox "마이다스에셋" [ref=e314]
+                  - generic [ref=e315]: 마이다스에셋
+                - generic [ref=e316] [cursor=pointer]:
+                  - checkbox "미래에셋자산운용" [ref=e317]
+                  - generic [ref=e318]: 미래에셋자산운용
+                - generic [ref=e319] [cursor=pointer]:
+                  - checkbox "브이아이자산운용" [ref=e320]
+                  - generic [ref=e321]: 브이아이자산운용
+                - generic [ref=e322] [cursor=pointer]:
+                  - checkbox "비엔케이자산운용" [ref=e323]
+                  - generic [ref=e324]: 비엔케이자산운용
+                - generic [ref=e325] [cursor=pointer]:
+                  - checkbox "삼성액티브자산운용" [ref=e326]
+                  - generic [ref=e327]: 삼성액티브자산운용
+                - generic [ref=e328] [cursor=pointer]:
+                  - checkbox "삼성자산운용" [ref=e329]
+                  - generic [ref=e330]: 삼성자산운용
+                - generic [ref=e331] [cursor=pointer]:
+                  - checkbox "신한자산운용" [ref=e332]
+                  - generic [ref=e333]: 신한자산운용
+                - generic [ref=e334] [cursor=pointer]:
+                  - checkbox "아이비케이자산운용" [ref=e335]
+                  - generic [ref=e336]: 아이비케이자산운용
+                - generic [ref=e337] [cursor=pointer]:
+                  - checkbox "아이엠에셋자산운용" [ref=e338]
+                  - generic [ref=e339]: 아이엠에셋자산운용
+                - generic [ref=e340] [cursor=pointer]:
+                  - checkbox "에셋플러스자산운용" [ref=e341]
+                  - generic [ref=e342]: 에셋플러스자산운용
+                - generic [ref=e343] [cursor=pointer]:
+                  - checkbox "엔에이치아문디자산운용" [ref=e344]
+                  - generic [ref=e345]: 엔에이치아문디자산운용
+                - generic [ref=e346] [cursor=pointer]:
+                  - checkbox "우리자산운용" [ref=e347]
+                  - generic [ref=e348]: 우리자산운용
+                - generic [ref=e349] [cursor=pointer]:
+                  - checkbox "유리에셋" [ref=e350]
+                  - generic [ref=e351]: 유리에셋
+                - generic [ref=e352] [cursor=pointer]:
+                  - checkbox "케이비자산운용" [ref=e353]
+                  - generic [ref=e354]: 케이비자산운용
+                - generic [ref=e355] [cursor=pointer]:
+                  - checkbox "케이씨지아이자산운용" [ref=e356]
+                  - generic [ref=e357]: 케이씨지아이자산운용
+                - generic [ref=e358] [cursor=pointer]:
+                  - checkbox "키움투자자산운용" [ref=e359]
+                  - generic [ref=e360]: 키움투자자산운용
+                - generic [ref=e361] [cursor=pointer]:
+                  - checkbox "타임폴리오자산운용" [ref=e362]
+                  - generic [ref=e363]: 타임폴리오자산운용
+                - generic [ref=e364] [cursor=pointer]:
+                  - checkbox "트러스톤자산운용" [ref=e365]
+                  - generic [ref=e366]: 트러스톤자산운용
+                - generic [ref=e367] [cursor=pointer]:
+                  - checkbox "하나자산운용" [ref=e368]
+                  - generic [ref=e369]: 하나자산운용
+                - generic [ref=e370] [cursor=pointer]:
+                  - checkbox "한국투자밸류자산운용" [ref=e371]
+                  - generic [ref=e372]: 한국투자밸류자산운용
+                - generic [ref=e373] [cursor=pointer]:
+                  - checkbox "한국투자신탁운용" [ref=e374]
+                  - generic [ref=e375]: 한국투자신탁운용
+                - generic [ref=e376] [cursor=pointer]:
+                  - checkbox "한화자산운용" [ref=e377]
+                  - generic [ref=e378]: 한화자산운용
+                - generic [ref=e379] [cursor=pointer]:
+                  - checkbox "현대자산운용" [ref=e380]
+                  - generic [ref=e381]: 현대자산운용
+                - generic [ref=e382] [cursor=pointer]:
+                  - checkbox "흥국자산운용" [ref=e383]
+                  - generic [ref=e384]: 흥국자산운용
+          - columnheader "시장 시장 필터 열기" [ref=e42]:
+            - generic [ref=e43]:
+              - generic [ref=e44]: 시장
+              - button "시장 필터 열기" [ref=e45] [cursor=pointer]:
+                - img [ref=e46]
+          - columnheader "자산 자산 필터 열기" [ref=e48]:
+            - generic [ref=e49]:
+              - generic [ref=e50]: 자산
+              - button "자산 필터 열기" [ref=e51] [cursor=pointer]:
+                - img [ref=e52]
+          - columnheader "총보수 총보수 필터 열기" [ref=e54]:
+            - generic [ref=e55]:
+              - generic [ref=e56]: 총보수
+              - button "총보수 필터 열기" [ref=e57] [cursor=pointer]:
+                - img [ref=e58]
+          - columnheader "과세유형 과세유형 필터 열기" [ref=e60]:
+            - generic [ref=e61]:
+              - generic [ref=e62]: 과세유형
+              - button "과세유형 필터 열기" [ref=e63] [cursor=pointer]:
+                - img [ref=e64]
+      - rowgroup [ref=e66]:
+        - button "파워 200 코스피 200 152870 교보악사자산운용 국내 주식 0.145% 비과세" [ref=e386] [cursor=pointer]:
+          - cell "파워 200 코스피 200" [ref=e387]:
+            - generic [ref=e388]:
+              - generic [ref=e389]: 파워 200
+              - generic [ref=e390]: 코스피 200
+          - cell "152870" [ref=e391]
+          - cell "교보악사자산운용" [ref=e392]
+          - cell "국내" [ref=e393]
+          - cell "주식" [ref=e394]
+          - cell "0.145%" [ref=e395]
+          - cell "비과세" [ref=e396]
+        - button "파워 고배당저변동성 코스피 200 고배당지수 192720 교보악사자산운용 국내 주식 0.230% 비과세" [ref=e397] [cursor=pointer]:
+          - cell "파워 고배당저변동성 코스피 200 고배당지수" [ref=e398]:
+            - generic [ref=e399]:
+              - generic [ref=e400]: 파워 고배당저변동성
+              - generic [ref=e401]: 코스피 200 고배당지수
+          - cell "192720" [ref=e402]
+          - cell "교보악사자산운용" [ref=e403]
+          - cell "국내" [ref=e404]
+          - cell "주식" [ref=e405]
+          - cell "0.230%" [ref=e406]
+          - cell "비과세" [ref=e407]
+        - button "파워 종합채권(AA-이상)액티브 KIS 한국종합채권지수(AA-이상, 총수익) 498180 교보악사자산운용 국내 채권 0.036% 배당소득세(보유기간과세)" [ref=e408] [cursor=pointer]:
+          - cell "파워 종합채권(AA-이상)액티브 KIS 한국종합채권지수(AA-이상, 총수익)" [ref=e409]:
+            - generic [ref=e410]:
+              - generic [ref=e411]: 파워 종합채권(AA-이상)액티브
+              - generic [ref=e412]: KIS 한국종합채권지수(AA-이상, 총수익)
+          - cell "498180" [ref=e413]
+          - cell "교보악사자산운용" [ref=e414]
+          - cell "국내" [ref=e415]
+          - cell "채권" [ref=e416]
+          - cell "0.036%" [ref=e417]
+          - cell "배당소득세(보유기간과세)" [ref=e418]
+        - button "파워 코스피100 코스피 100 140950 교보악사자산운용 국내 주식 0.155% 비과세" [ref=e419] [cursor=pointer]:
+          - cell "파워 코스피100 코스피 100" [ref=e420]:
+            - generic [ref=e421]:
+              - generic [ref=e422]: 파워 코스피100
+              - generic [ref=e423]: 코스피 100
+          - cell "140950" [ref=e424]
+          - cell "교보악사자산운용" [ref=e425]
+          - cell "국내" [ref=e426]
+          - cell "주식" [ref=e427]
+          - cell "0.155%" [ref=e428]
+          - cell "비과세" [ref=e429]
+        - button "파워 K-주주가치액티브 FnGuide K-주주가치 지수 491510 교보악사자산운용 국내 주식 0.405% 배당소득세(보유기간과세)" [ref=e430] [cursor=pointer]:
+          - cell "파워 K-주주가치액티브 FnGuide K-주주가치 지수" [ref=e431]:
+            - generic [ref=e432]:
+              - generic [ref=e433]: 파워 K-주주가치액티브
+              - generic [ref=e434]: FnGuide K-주주가치 지수
+          - cell "491510" [ref=e435]
+          - cell "교보악사자산운용" [ref=e436]
+          - cell "국내" [ref=e437]
+          - cell "주식" [ref=e438]
+          - cell "0.405%" [ref=e439]
+          - cell "배당소득세(보유기간과세)" [ref=e440]
+  - navigation "검색 결과 페이지" [ref=e287]:
+    - button "이전" [disabled] [ref=e288]
+    - button "1" [ref=e290] [cursor=pointer]
+    - button "다음" [disabled] [ref=e297]
