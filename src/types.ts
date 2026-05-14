@@ -35,6 +35,16 @@ export type EtfPrice = {
   netAssets?: string;
 };
 
+export type EtfPriceResponse = {
+  basDd: string;
+  count: number;
+  failures?: Array<{
+    code: string;
+    error: string;
+  }>;
+  prices: Record<string, EtfPrice>;
+};
+
 export type EtfHolding = {
   componentCode: string;
   componentName?: string;

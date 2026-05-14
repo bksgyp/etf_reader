@@ -1,4 +1,4 @@
-import type { Etf, EtfPrice } from "./types";
+import type { Etf } from "./types";
 import etfs from "./data/etfs.json";
 
 export const typedEtfs = etfs as Etf[];
@@ -33,6 +33,7 @@ export const filterKeys = [
 
 export const pageSize = 20;
 export const holdingPageSize = 10;
+export const overseasHoldingLimit = 50;
 
 export const nameCollator = new Intl.Collator("ko-KR", {
   numeric: true,
@@ -42,23 +43,6 @@ export const nameCollator = new Intl.Collator("ko-KR", {
 export const emptyColumnFilters = Object.fromEntries(
   filterKeys.map((key) => [key, [] as string[]]),
 ) as ColumnFilters;
-
-export const dummyPrice: EtfPrice = {
-  basDd: "20260514",
-  code: "",
-  name: "",
-  close: "10000",
-  change: "0",
-  changeRate: "0.00",
-  nav: "10000",
-  open: "10000",
-  high: "10000",
-  low: "10000",
-  volume: "0",
-  tradingValue: "0",
-  marketCap: "0",
-  netAssets: "0",
-};
 
 export const chartColors = [
   "#1d4ed8",

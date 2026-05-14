@@ -5,6 +5,7 @@
     "preview": "vite preview",
     "generate:data": "node scripts/generate-etfs.mjs",
     "fetch:holdings": ".venv/bin/python scripts/fetch_etf_holdings.py",
+    "fill:overseas-weights": "node scripts/fill-overseas-etf-weights.mjs",
     "test": "node --test"
   },
   "dependencies": {
