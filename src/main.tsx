@@ -1,7 +1,7 @@
 import { StrictMode, useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { createRoot } from "react-dom/client";
-import { RefreshCw, Search, X } from "lucide-react";
+import { Filter, RefreshCw, Search, X } from "lucide-react";
 import etfs from "./data/etfs.json";
 import holdings from "./data/etf_holdings.json";
 import type { Etf, EtfHolding, EtfHoldingPayload, EtfPrice, EtfPriceResponse } from "./types";
@@ -24,13 +24,13 @@ const tableColumns = [
   { key: "asset", label: "자산" },
   { key: "fee", label: "총보수" },
   { key: "tax", label: "과세유형" },
-  { key: "holding", label: "구성종목" },
 ] as const;
 type TableColumnKey = (typeof tableColumns)[number]["key"];
-type ColumnFilters = Record<TableColumnKey, string>;
+type ColumnFilters = Record<TableColumnKey | "holding", string>;
+const filterKeys = [...tableColumns.map((column) => column.key), "holding"] as Array<keyof ColumnFilters>;
 const pageSize = 20;
 const nameCollator = new Intl.Collator("ko-KR", { numeric: true, sensitivity: "base" });
-const emptyColumnFilters = Object.fromEntries(tableColumns.map((column) => [column.key, ""])) as ColumnFilters;
+const emptyColumnFilters = Object.fromEntries(filterKeys.map((key) => [key, ""])) as ColumnFilters;
 const holdingsByEtfCode = Object.fromEntries(typedHoldings.etfs.map((etf) => [etf.etfCode, etf.holdings]));
 
 function normalize(value: string) {
@@ -120,7 +120,7 @@ function getHoldingSummary(etf: Etf, query = "") {
   return `${visibleHoldings.map(formatHolding).join(", ")}${suffix}`;
 }
 
-function getColumnValue(etf: Etf, key: TableColumnKey, holdingQuery = "") {
+function getColumnValue(etf: Etf, key: TableColumnKey) {
   switch (key) {
     case "name":
       return `${etf.한글종목약명} ${etf.한글종목명} ${etf.영문종목명} ${etf.기초지수명}`;
@@ -136,8 +136,6 @@ function getColumnValue(etf: Etf, key: TableColumnKey, holdingQuery = "") {
       return formatFee(etf.총보수);
     case "tax":
       return etf.과세유형;
-    case "holding":
-      return getHoldingSummary(etf, holdingQuery);
   }
 }
 
@@ -149,7 +147,7 @@ function matchesColumnFilters(etf: Etf, columnFilters: ColumnFilters) {
       return true;
     }
 
-    return normalize(getColumnValue(etf, column.key, columnFilters.holding)).includes(normalizedFilter);
+    return normalize(getColumnValue(etf, column.key)).includes(normalizedFilter);
   });
 }
 
@@ -180,6 +178,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [searchCategory, setSearchCategory] = useState<SearchCategory>("name");
   const [columnFilters, setColumnFilters] = useState<ColumnFilters>(emptyColumnFilters);
+  const [openFilter, setOpenFilter] = useState<TableColumnKey | "">("");
   const [currentPage, setCurrentPage] = useState(1);
   const [prices, setPrices] = useState<Record<string, EtfPrice>>({});
   const [priceError, setPriceError] = useState("");
@@ -259,12 +258,13 @@ function App() {
     setSelectedEtf(null);
   }
 
-  function updateColumnFilter(key: TableColumnKey, value: string) {
+  function updateColumnFilter(key: keyof ColumnFilters, value: string) {
     setColumnFilters((currentFilters) => ({ ...currentFilters, [key]: value }));
   }
 
   function clearColumnFilters() {
     setColumnFilters(emptyColumnFilters);
+    setOpenFilter("");
   }
 
   useEffect(() => {
@@ -332,20 +332,34 @@ function App() {
           <thead>
             <tr>
               {tableColumns.map((column) => (
-                <th key={column.key}>{column.label}</th>
-              ))}
-            </tr>
-            <tr className="filterRow">
-              {tableColumns.map((column) => (
                 <th key={column.key}>
-                  <input
-                    type="search"
-                    value={columnFilters[column.key]}
-                    onChange={(event) => updateColumnFilter(column.key, event.target.value)}
-                    onClick={(event) => event.stopPropagation()}
-                    placeholder={`${column.label} 필터`}
-                    aria-label={`${column.label} 컬럼 필터`}
-                  />
+                  <div className="columnHeader">
+                    <span>{column.label}</span>
+                    <button
+                      className={columnFilters[column.key] ? "filterButton activeFilter" : "filterButton"}
+                      type="button"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setOpenFilter((currentFilter) => (currentFilter === column.key ? "" : column.key));
+                      }}
+                      aria-label={`${column.label} 필터 열기`}
+                      aria-expanded={openFilter === column.key}
+                    >
+                      <Filter aria-hidden="true" size={14} />
+                    </button>
+                    {openFilter === column.key ? (
+                      <div className="filterPopover" onClick={(event) => event.stopPropagation()}>
+                        <input
+                          type="search"
+                          value={columnFilters[column.key]}
+                          onChange={(event) => updateColumnFilter(column.key, event.target.value)}
+                          placeholder={`${column.label} 필터`}
+                          aria-label={`${column.label} 컬럼 필터`}
+                          autoFocus
+                        />
+                      </div>
+                    ) : null}
+                  </div>
                 </th>
               ))}
             </tr>
@@ -373,7 +387,6 @@ function App() {
                   <td>{etf.기초자산분류}</td>
                   <td>{formatFee(etf.총보수)}</td>
                   <td>{etf.과세유형}</td>
-                  <td className="holdingCell">{getHoldingSummary(etf, searchCategory === "holding" ? query : columnFilters.holding)}</td>
                 </tr>
               );
             })}
