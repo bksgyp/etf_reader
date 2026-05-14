@@ -2,6 +2,10 @@ const KIS_PROD_DOMAIN = "https://openapi.koreainvestment.com:9443";
 const KIS_VTS_DOMAIN = "https://openapivts.koreainvestment.com:29443";
 const MAX_CODES = 20;
 const PRICE_REQUEST_DELAY_MS = 350;
+const TOKEN_EXPIRY_BUFFER_MS = 60_000;
+const DEFAULT_TOKEN_TTL_MS = 23 * 60 * 60 * 1000;
+
+let tokenCache = null;
 
 function getKisDomain() {
   return process.env.KIS_ENV === "vts" ? KIS_VTS_DOMAIN : KIS_PROD_DOMAIN;
@@ -24,7 +28,28 @@ function wait(ms) {
   });
 }
 
-async function getAccessToken(domain, appKey, appSecret) {
+function getTokenTtl(data) {
+  const expiresInSeconds = Number(data?.expires_in);
+  return Number.isFinite(expiresInSeconds) && expiresInSeconds > 0
+    ? Math.max(0, expiresInSeconds * 1000 - TOKEN_EXPIRY_BUFFER_MS)
+    : DEFAULT_TOKEN_TTL_MS;
+}
+
+function getCachedAccessToken(domain, appKey, appSecret) {
+  if (
+    tokenCache &&
+    tokenCache.domain === domain &&
+    tokenCache.appKey === appKey &&
+    tokenCache.appSecret === appSecret &&
+    tokenCache.expiresAt > Date.now() + TOKEN_EXPIRY_BUFFER_MS
+  ) {
+    return tokenCache.token;
+  }
+
+  return "";
+}
+
+async function requestAccessToken(domain, appKey, appSecret) {
   const response = await fetch(`${domain}/oauth2/tokenP`, {
     method: "POST",
     headers: {
@@ -43,7 +68,19 @@ async function getAccessToken(domain, appKey, appSecret) {
     throw new Error(data?.msg1 || data?.error_description || `KIS token request failed: ${response.status}`);
   }
 
-  return data.access_token;
+  tokenCache = {
+    domain,
+    appKey,
+    appSecret,
+    token: data.access_token,
+    expiresAt: Date.now() + getTokenTtl(data),
+  };
+
+  return tokenCache.token;
+}
+
+async function getAccessToken(domain, appKey, appSecret) {
+  return getCachedAccessToken(domain, appKey, appSecret) || requestAccessToken(domain, appKey, appSecret);
 }
 
 function normalizePrice(code, output) {
