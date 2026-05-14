@@ -1,0 +1,232 @@
+<h2>히어로존 — 운용사 로고 배경 워터마크</h2>
+<p class="subtitle">배경 컬러 제거, 운용사 로고를 반투명하게 배경에 배치한 버전입니다 (예: 삼성자산운용)</p>
+
+<style>
+  .preview-wrap {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .mock-modal {
+    width: 360px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 12px 48px rgba(15,23,42,0.22);
+    overflow: hidden;
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .mm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .mm-title { font-size: 17px; font-weight: 800; color: #111827; margin: 0 0 3px; }
+  .mm-sub { font-size: 12px; color: #6b7280; }
+  .mm-actions { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  .mm-btn { display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:6px 11px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;color:#374151; }
+  .mm-close { width:32px;height:32px;border-radius:8px;border:1px solid #e2e8f0;background:#f8fafc;display:flex;align-items:center;justify-content:center;color:#64748b;font-size:15px; }
+
+  /* Hero zone — no color, logo watermark */
+  .mm-hero {
+    position: relative;
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    overflow: hidden;
+    background: #fff;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .mm-hero-logo {
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 200px;
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+  }
+  .mm-hero-content { position: relative; z-index: 1; }
+  .mm-hero-price { font-size: 34px; font-weight: 900; color: #111827; letter-spacing: -1px; line-height: 1; }
+  .mm-hero-change { font-size: 14px; font-weight: 700; color: #c2410c; margin-top: 4px; }
+  .mm-hero-label { font-size: 11px; color: #9ca3af; margin-bottom: 3px; font-weight: 600; }
+  .mm-hero-right { position: relative; z-index: 1; text-align: right; }
+  .mm-hero-nav { font-size: 18px; font-weight: 800; color: #374151; }
+  .mm-hero-vol { font-size: 12px; color: #9ca3af; margin-top: 3px; }
+
+  /* Info grid */
+  .mm-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .mm-info-item { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
+  .mm-info-label { font-size: 11px; color: #6b7280; font-weight: 600; margin-bottom: 2px; }
+  .mm-info-val { font-size: 14px; font-weight: 800; color: #111827; }
+
+  /* Holdings header */
+  .mm-holdings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px 8px;
+  }
+  .mm-holdings-title { font-size: 14px; font-weight: 700; color: #111827; }
+  .mm-holdings-count { font-size: 12px; color: #9ca3af; }
+
+  /* Chart wrap — blue */
+  .mm-chart-wrap {
+    margin: 0 16px 12px;
+    padding: 14px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .mm-pie {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: conic-gradient(#1d4ed8 0% 32%, #2563eb 32% 55%, #3b82f6 55% 70%, #60a5fa 70% 82%, #dbeafe 82% 100%);
+    flex-shrink: 0; position: relative;
+  }
+  .mm-pie::after {
+    content: '503'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 900; color: #1e3a8a;
+    background: #fff; border-radius: 50%; margin: 14px;
+  }
+  .mm-legend { display: grid; gap: 5px; min-width: 0; }
+  .mm-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+  .mm-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .mm-legend-name { color: #1e3a8a; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mm-legend-pct { color: #2563eb; font-weight: 800; }
+
+  /* Holding cards */
+  .mm-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 16px 16px; }
+  .mm-hcard {
+    border: 1px solid #e7ecf2; border-radius: 8px; padding: 10px 12px;
+    background: #fff; display: flex; justify-content: space-between; align-items: center;
+  }
+  .mm-hcard-name { font-size: 12px; font-weight: 700; color: #111827; }
+  .mm-hcard-code { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+  .mm-hcard-pct { font-size: 13px; font-weight: 800; color: #2563eb; }
+
+  /* Annotations */
+  .ann { display: flex; flex-direction: column; gap: 12px; padding-top: 8px; max-width: 200px; }
+  .ann-item { display: flex; align-items: flex-start; gap: 10px; }
+  .ann-dot { flex-shrink:0;width:10px;height:10px;border-radius:50%;margin-top:3px; }
+  .ann-text strong { font-size: 12px; color: #111827; }
+  .ann-text p { font-size: 11px; color: #6b7280; margin: 2px 0 0; line-height: 1.4; }
+</style>
+
+<div class="preview-wrap">
+  <div class="mock-modal">
+    <!-- Header -->
+    <div class="mm-header">
+      <div>
+        <div class="mm-title">KODEX 미국S&P500TR</div>
+        <div class="mm-sub">379780 · 삼성자산운용 · 보수 0.021%</div>
+      </div>
+      <div class="mm-actions">
+        <button class="mm-btn">↻ 시세 갱신</button>
+        <div class="mm-close">✕</div>
+      </div>
+    </div>
+
+    <!-- Hero — no color bg, logo watermark -->
+    <div class="mm-hero">
+      <!-- Samsung logo as watermark -->
+      <svg class="mm-hero-logo" viewBox="0 0 2318 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M234.41 103.1C234.41 74.63 221.29 48.86 200.09 30.2C178.89 11.54 149.6 0 117.24 0C84.88 0 55.59 11.54 34.39 30.2C13.18 48.85 0.0699601 74.63 0.0699601 103.1C0.0699601 103.1 -6.77004 185.54 117.24 300C241.25 185.54 234.41 103.1 234.41 103.1Z" fill="#1454FF"/>
+        <path d="M1098.24 98.28C1074.57 98.28 1052.87 106.92 1037.13 122.6C1021.42 138.26 1012.76 159.83 1012.76 183.34C1012.76 206.85 1021.42 228.42 1037.13 244.08C1052.87 259.76 1074.57 268.4 1098.24 268.4C1121.91 268.4 1143.61 259.76 1159.35 244.08C1175.06 228.43 1183.72 206.86 1183.72 183.34C1183.72 159.82 1175.06 138.25 1159.35 122.6C1143.61 106.92 1121.91 98.28 1098.24 98.28Z" fill="black"/>
+        <path d="M1023.08 265.7L923.97 150.52L1021.04 44.76H962.76L876.13 138.86V44.76H831.28V265.7H876.13V161.3L966.12 265.7H1023.08Z" fill="black"/>
+        <path d="M385.28 114.61C380.89 124.57 373.79 135.04 364.86 144.53C355.63 154.49 344.4 163.2 332.91 170.07L312.95 146.84C327.26 138.69 340.82 127.36 351.01 113.01C361.27 99.03 367.65 82.65 367.65 64.22V42.73H400.86V63.75C400.86 81.85 407.54 97.25 417.5 109.77C427.53 122.8 441.05 132.5 454.33 138.91L436.43 163.19C411.85 149.84 395.78 134 385.28 114.6M367.64 181.57H501.85V279.5H367.64V181.57ZM399.06 252.91H470.14V208.44H399.06V252.91ZM501.86 172.4H470.14V37.44H501.86V91.06H538.92V117.94H501.86V172.39Z" fill="#1454FF"/>
+        <path d="M1678.69 265.72L1642.81 215.69L1606.6 265.72H1557.09L1617.89 181.78L1559.75 101.13H1609.25L1642.81 147.54L1676.37 101.13H1725.54L1667.4 181.45L1728.2 265.72H1678.69Z" fill="black"/>
+        <path d="M1854.57 175.34H1951.57V133.01H1854.57V87.4H1958.97V44.78H1811.08V265.7H1960.46V223.06H1854.57V175.34Z" fill="black"/>
+        <path d="M1977.2 87.4H2043.6V265.7H2087.06V87.4H2153.16V44.77H1977.2V87.4Z" fill="black"/>
+        <path d="M2317.05 87.39V44.76H2172.12V265.7H2215.59V179.87H2314.08V137.23H2215.59V87.39H2317.05Z" fill="black"/>
+      </svg>
+
+      <div class="mm-hero-content">
+        <div class="mm-hero-label">현재가</div>
+        <div class="mm-hero-price">17,840</div>
+        <div class="mm-hero-change">▲ 220원 &nbsp;+1.23%</div>
+      </div>
+      <div class="mm-hero-right">
+        <div class="mm-hero-label">NAV</div>
+        <div class="mm-hero-nav">17,835</div>
+        <div class="mm-hero-vol">거래량 243,100</div>
+      </div>
+    </div>
+
+    <!-- Info grid -->
+    <div class="mm-info-grid">
+      <div class="mm-info-item"><div class="mm-info-label">운용사</div><div class="mm-info-val">삼성자산운용</div></div>
+      <div class="mm-info-item"><div class="mm-info-label">총보수</div><div class="mm-info-val">0.021%</div></div>
+      <div class="mm-info-item"><div class="mm-info-label">과세유형</div><div class="mm-info-val">보통</div></div>
+      <div class="mm-info-item"><div class="mm-info-label">시장분류</div><div class="mm-info-val">해외주식</div></div>
+    </div>
+
+    <!-- Holdings -->
+    <div class="mm-holdings-header">
+      <span class="mm-holdings-title">구성종목</span>
+      <span class="mm-holdings-count">503개</span>
+    </div>
+    <div class="mm-chart-wrap">
+      <div class="mm-pie"></div>
+      <div class="mm-legend">
+        <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#1d4ed8"></div><span class="mm-legend-name">Apple</span><span class="mm-legend-pct">7.21%</span></div>
+        <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#2563eb"></div><span class="mm-legend-name">NVIDIA</span><span class="mm-legend-pct">6.85%</span></div>
+        <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#3b82f6"></div><span class="mm-legend-name">Microsoft</span><span class="mm-legend-pct">6.12%</span></div>
+        <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#60a5fa"></div><span class="mm-legend-name">Amazon</span><span class="mm-legend-pct">3.87%</span></div>
+        <div class="mm-legend-item"><div class="mm-legend-dot" style="background:#dbeafe;border:1px solid #bfdbfe"></div><span class="mm-legend-name">기타</span><span class="mm-legend-pct">75.95%</span></div>
+      </div>
+    </div>
+    <div class="mm-cards-grid">
+      <div class="mm-hcard"><div><div class="mm-hcard-name">Apple Inc.</div><div class="mm-hcard-code">AAPL</div></div><div class="mm-hcard-pct">7.21%</div></div>
+      <div class="mm-hcard"><div><div class="mm-hcard-name">NVIDIA</div><div class="mm-hcard-code">NVDA</div></div><div class="mm-hcard-pct">6.85%</div></div>
+      <div class="mm-hcard"><div><div class="mm-hcard-name">Microsoft</div><div class="mm-hcard-code">MSFT</div></div><div class="mm-hcard-pct">6.12%</div></div>
+      <div class="mm-hcard"><div><div class="mm-hcard-name">Amazon</div><div class="mm-hcard-code">AMZN</div></div><div class="mm-hcard-pct">3.87%</div></div>
+    </div>
+  </div>
+
+  <div class="ann">
+    <div style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;">디자인 포인트</div>
+    <div class="ann-item">
+      <div class="ann-dot" style="background:#111827"></div>
+      <div class="ann-text">
+        <strong>히어로존 배경색 제거</strong>
+        <p>흰색 배경. 로고만으로 운용사 아이덴티티 전달.</p>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-dot" style="background:#9ca3af"></div>
+      <div class="ann-text">
+        <strong>로고 워터마크 (opacity 7%)</strong>
+        <p>우측에 크게 배치. 텍스트 가독성에 영향 없이 존재감만 남김. 로고 없는 운용사는 영역 비움.</p>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-dot" style="background:#2563eb"></div>
+      <div class="ann-text">
+        <strong>차트·구성종목 파란색 유지</strong>
+        <p>이전 확정 방향 그대로.</p>
+      </div>
+    </div>
+    <div class="ann-item">
+      <div class="ann-dot" style="background:#c2410c"></div>
+      <div class="ann-text">
+        <strong>등락률 색상</strong>
+        <p>한국 관례: 상승 빨강(#c2410c), 하락 파랑(#1d4ed8).</p>
+      </div>
+    </div>
+  </div>
+</div>

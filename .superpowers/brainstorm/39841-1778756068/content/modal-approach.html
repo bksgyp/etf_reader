@@ -1,0 +1,178 @@
+<h2>모달 디자인 방향</h2>
+<p class="subtitle">3가지 접근 방식 중 선호하는 방향을 선택해주세요</p>
+
+<style>
+  .mock-modal {
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(15,23,42,0.18);
+    overflow: hidden;
+    font-family: Inter, -apple-system, sans-serif;
+    font-size: 13px;
+  }
+  .mm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #e7ecf2;
+    background: #fff;
+  }
+  .mm-title { font-size: 16px; font-weight: 800; color: #111827; margin: 0 0 2px; }
+  .mm-sub { font-size: 12px; color: #6b7280; }
+  .mm-close { width: 28px; height: 28px; border-radius: 6px; border: 1px solid #e2e8f0; background: #f8fafc; display:flex;align-items:center;justify-content:center; color:#64748b; font-size:14px; }
+  .mm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #f1f5f9; padding: 12px; gap: 8px; }
+  .mm-grid-item { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
+  .mm-grid-label { font-size: 11px; color: #6b7280; font-weight: 600; margin-bottom: 2px; }
+  .mm-grid-val { font-size: 15px; font-weight: 800; color: #111827; }
+  .mm-price-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 0 12px 12px; }
+  .mm-price-item { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
+  .mm-pie { width: 52px; height: 52px; border-radius: 50%; background: conic-gradient(#047857 0% 32%, #059669 32% 55%, #10b981 55% 70%, #34d399 70% 82%, #dcfce7 82% 100%); display:block; }
+  .mm-holdings-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 0 12px 12px; }
+  .mm-holding-card { border: 1px solid #e7ecf2; border-radius: 7px; padding: 8px 10px; background: #fff; }
+  .mm-hc-name { font-size: 12px; font-weight: 700; color: #111827; }
+  .mm-hc-code { font-size: 11px; color: #9ca3af; }
+  .mm-hc-weight { font-size: 12px; font-weight: 800; color: #047857; margin-top: 2px; }
+  .mm-section-title { font-size: 13px; font-weight: 700; color: #374151; padding: 12px 12px 6px; }
+  .mm-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+  .mm-refresh-btn { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 7px; border: 1px solid #e2e8f0; background: #fff; color: #374151; }
+
+  /* A: Slide-up centered */
+  .approach-a .mm-header { background: linear-gradient(135deg, #f0fdf4 0%, #fff 60%); }
+  .approach-a .entry-hint { font-size: 11px; color: #059669; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 4px; padding: 2px 7px; margin-top: 2px; display: inline-block; }
+
+  /* B: Right Drawer */
+  .approach-b-wrap { display: flex; gap: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(15,23,42,0.18); }
+  .approach-b-dim { flex: 1; background: rgba(15,23,42,0.3); min-height: 280px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.5); font-size: 12px; border-radius: 12px 0 0 12px; }
+  .approach-b-panel { width: 260px; background: #fff; display: flex; flex-direction: column; }
+  .approach-b .mm-header { border-bottom: 1px solid #f1f5f9; }
+
+  /* C: Tabbed */
+  .approach-c .mm-tabs { display: flex; gap: 0; border-bottom: 1px solid #e7ecf2; padding: 0 12px; }
+  .approach-c .mm-tab { padding: 8px 12px; font-size: 12px; font-weight: 700; color: #9ca3af; border-bottom: 2px solid transparent; cursor: pointer; }
+  .approach-c .mm-tab.active { color: #2563eb; border-bottom-color: #2563eb; }
+  .approach-c .mm-hero { padding: 14px 12px 10px; background: linear-gradient(135deg, #f0fdf4, #fff); display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #f1f5f9; }
+  .approach-c .mm-hero-price { font-size: 24px; font-weight: 900; color: #111827; }
+  .approach-c .mm-hero-change { font-size: 13px; font-weight: 700; color: #c2410c; }
+  .approach-c .mm-hero-label { font-size: 11px; color: #9ca3af; }
+
+  .cards { grid-template-columns: 1fr !important; gap: 16px !important; }
+</style>
+
+<div class="cards">
+
+  <!-- Option A -->
+  <div class="card approach-a" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#f8fafc;">
+      <div class="mock-modal" style="max-width:100%">
+        <div class="mm-header">
+          <div>
+            <div class="mm-title">KODEX 미국S&P500TR</div>
+            <div class="mm-sub">379780 · 삼성자산운용</div>
+            <span class="entry-hint">↑ 아래서 슬라이드인 + 페이드</span>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="mm-refresh-btn">↻ 시세 갱신</button>
+            <div class="mm-close">✕</div>
+          </div>
+        </div>
+        <div class="mm-grid">
+          <div class="mm-grid-item"><div class="mm-grid-label">종가</div><div class="mm-grid-val">17,840</div></div>
+          <div class="mm-grid-item"><div class="mm-grid-label">등락률</div><div class="mm-grid-val" style="color:#c2410c">+1.23%</div></div>
+          <div class="mm-grid-item"><div class="mm-grid-label">NAV</div><div class="mm-grid-val">17,835</div></div>
+          <div class="mm-grid-item"><div class="mm-grid-label">거래량</div><div class="mm-grid-val">243,100</div></div>
+        </div>
+        <div class="mm-section-title">구성종목 <span style="color:#6b7280;font-weight:400;font-size:12px;">503개</span></div>
+        <div style="display:flex;gap:12px;align-items:center;padding:0 12px 10px">
+          <div class="mm-pie"></div>
+          <div style="display:grid;gap:4px;font-size:11px;">
+            <span>🟢 Apple 7.21%</span><span>🟩 NVIDIA 6.85%</span><span>🟦 Microsoft 6.12%</span>
+          </div>
+        </div>
+        <div class="mm-holdings-row">
+          <div class="mm-holding-card"><div class="mm-hc-name">Apple Inc.</div><div class="mm-hc-code">AAPL</div><div class="mm-hc-weight">7.21%</div></div>
+          <div class="mm-holding-card"><div class="mm-hc-name">NVIDIA</div><div class="mm-hc-code">NVDA</div><div class="mm-hc-weight">6.85%</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — 정제된 센터 모달 (현재 방향 개선)</h3>
+      <p>화면 아래에서 슬라이드업 + 오버레이 페이드인. 정보 그리드를 카드형으로 개선, 파이차트 영역 시각적 강화. 기존 레이아웃 유지하며 애니메이션·타이포·여백 품질 올림.</p>
+    </div>
+  </div>
+
+  <!-- Option B -->
+  <div class="card approach-b" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#f8fafc;">
+      <div class="approach-b-wrap" style="height:260px;">
+        <div class="approach-b-dim">배경 페이지<br>(어둡게)</div>
+        <div class="approach-b-panel">
+          <div class="mm-header" style="padding:12px 14px 10px;">
+            <div>
+              <div class="mm-title" style="font-size:14px;">KODEX S&P500TR</div>
+              <div class="mm-sub">379780 · 삼성</div>
+            </div>
+            <div class="mm-close">✕</div>
+          </div>
+          <div style="padding:10px 12px;flex:1;overflow:hidden;">
+            <div style="display:grid;gap:6px;">
+              <div class="mm-grid-item"><div class="mm-grid-label">종가</div><div class="mm-grid-val">17,840</div></div>
+              <div class="mm-grid-item"><div class="mm-grid-label">등락률</div><div class="mm-grid-val" style="color:#c2410c">+1.23%</div></div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;font-weight:700;color:#374151;margin-bottom:4px;">구성종목</div>
+            <div class="mm-holding-card" style="margin-bottom:4px;"><div class="mm-hc-name">Apple Inc.</div><div class="mm-hc-weight">7.21%</div></div>
+            <div class="mm-holding-card"><div class="mm-hc-name">NVIDIA</div><div class="mm-hc-weight">6.85%</div></div>
+          </div>
+          <div style="padding:8px 12px;font-size:10px;color:#9ca3af;text-align:center;border-top:1px solid #f1f5f9;">← 오른쪽에서 슬라이드인</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — 우측 슬라이드 드로어</h3>
+      <p>오른쪽에서 패널이 밀려들어오는 형태. 모바일·태블릿 친화적이며, 정보가 많을 때 스크롤 영역이 충분함. 배경 페이지가 살짝 보여 컨텍스트가 유지됨.</p>
+    </div>
+  </div>
+
+  <!-- Option C -->
+  <div class="card approach-c" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px; background:#f8fafc;">
+      <div class="mock-modal" style="max-width:100%">
+        <div class="mm-header">
+          <div>
+            <div class="mm-title">KODEX 미국S&P500TR</div>
+            <div class="mm-sub">379780 · 삼성자산운용 · 보수 0.021%</div>
+          </div>
+          <div class="mm-close">✕</div>
+        </div>
+        <div class="mm-hero">
+          <div>
+            <div class="mm-hero-label">현재가</div>
+            <div class="mm-hero-price">17,840</div>
+            <div class="mm-hero-change">▲ 220 +1.23%</div>
+          </div>
+          <div style="margin-left:auto;text-align:right;">
+            <div class="mm-hero-label">NAV</div>
+            <div style="font-size:16px;font-weight:800;color:#374151;">17,835</div>
+          </div>
+        </div>
+        <div class="mm-tabs">
+          <div class="mm-tab active">시세 정보</div>
+          <div class="mm-tab">구성종목</div>
+          <div class="mm-tab">기본정보</div>
+        </div>
+        <div style="padding:10px 12px 12px;">
+          <div class="mm-price-row" style="grid-template-columns:1fr 1fr;gap:6px;padding:0;margin-bottom:8px;">
+            <div class="mm-price-item"><div class="mm-grid-label">거래량</div><div style="font-size:14px;font-weight:800;color:#111827;">243,100</div></div>
+            <div class="mm-price-item"><div class="mm-grid-label">거래대금</div><div style="font-size:14px;font-weight:800;color:#111827;">43.3억</div></div>
+          </div>
+          <div style="font-size:11px;color:#9ca3af;text-align:center;">↑ 탭 전환으로 구성종목 확인</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — 히어로 가격 + 탭 레이아웃</h3>
+      <p>모달 상단에 현재가·등락률을 크게 강조(히어로존). 시세/구성종목/기본정보를 탭으로 분리해 콘텐츠 밀도를 낮춤. 정보 계층이 명확하고 탭 전환 애니메이션으로 인터랙션 풍부.</p>
+    </div>
+  </div>
+
+</div>

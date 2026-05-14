@@ -2,7 +2,12 @@
   color: #17202a;
   background: #f6f7f9;
   font-family:
-    Inter, Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    Inter,
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   font-synthesis: none;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
@@ -289,11 +294,6 @@ tbody tr:hover {
   width: 100%;
 }
 
-.numeric {
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-}
-
 .columnHeader {
   position: relative;
   display: flex;
@@ -362,10 +362,6 @@ tbody tr:hover {
   font-weight: 700;
 }
 
-.spinning {
-  animation: spin 0.8s linear infinite;
-}
-
 .empty {
   padding: 28px 16px;
   text-align: center;
@@ -379,6 +375,11 @@ tbody tr:hover {
   place-items: center;
   padding: 18px;
   background: rgba(15, 23, 42, 0.48);
+  animation: overlayFadeIn 200ms ease forwards;
+}
+
+.modalOverlay--closing {
+  animation: overlayFadeOut 180ms ease forwards;
 }
 
 .priceModal {
@@ -388,6 +389,11 @@ tbody tr:hover {
   border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.26);
+  animation: modalSlideUp 260ms cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+.priceModal--closing {
+  animation: modalSlideDown 200ms ease-in forwards;
 }
 
 .modalHeader {
@@ -404,6 +410,75 @@ tbody tr:hover {
   font-size: 22px;
   line-height: 1.2;
   letter-spacing: 0;
+}
+
+.heroZone {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 20px;
+  border-bottom: 1px solid #f1f5f9;
+  overflow: hidden;
+}
+
+.heroLogoWatermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 60%;
+  max-height: 80%;
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
+  object-fit: contain;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+}
+
+.heroRight {
+  position: relative;
+  z-index: 1;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.heroLabel {
+  margin-bottom: 3px;
+  color: #9ca3af;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.heroPrice {
+  color: #111827;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.heroChange {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.heroNav {
+  color: #374151;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.heroVol {
+  margin-top: 3px;
+  color: #9ca3af;
+  font-size: 12px;
 }
 
 .iconButton {
@@ -461,54 +536,404 @@ tbody tr:hover {
   margin: 16px 20px 0;
 }
 
-.infoGrid,
-.priceGrid {
+.infoGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1px;
+  gap: 8px;
   margin: 0;
-  padding: 20px;
+  padding: 16px;
 }
 
-.infoGrid {
-  padding-bottom: 0;
-}
-
-.infoGrid div,
-.priceGrid div {
+.infoGrid div {
   min-width: 0;
-  padding: 14px;
+  padding: 12px 14px;
   background: #f8fafc;
+  border-radius: 8px;
 }
 
-.infoGrid dt,
-.priceGrid dt {
+.infoGrid dt {
   margin-bottom: 4px;
   color: #5a6573;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
 }
 
-.infoGrid dd,
-.priceGrid dd {
+.infoGrid dd {
   margin: 0;
   color: #111827;
-  font-size: 18px;
+  font-size: 14px;
   font-variant-numeric: tabular-nums;
   font-weight: 800;
 }
 
-.priceGrid dd.positive {
-  color: #c2410c;
+.holdingsPanel {
+  padding: 0 20px 20px;
 }
 
-.priceGrid dd.negative {
-  color: #1d4ed8;
+.holdingsHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.holdingsHeader h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+.holdingsHeader span {
+  color: #5a6573;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.holdingsChartWrap {
+  display: grid;
+  grid-template-columns: 156px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 18px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background: #eff6ff;
+}
+
+.pieChart {
+  position: relative;
+  display: grid;
+  width: 156px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.pieChart svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  opacity: 0;
+  transform: rotate(-90deg);
+  animation: chartReveal 0.9s ease-out forwards;
+}
+
+.pieTrack,
+.pieSegment,
+.pieReveal {
+  fill: none;
+  stroke-width: 18;
+}
+
+.pieTrack {
+  stroke: #dbeafe;
+}
+
+.pieSegment {
+  opacity: 0;
+  animation: segmentSettle 0.38s ease-out forwards;
+  stroke-linecap: butt;
+}
+
+.pieReveal {
+  animation: revealPieClockwise 1.65s cubic-bezier(0.2, 0.78, 0.18, 1) forwards;
+  stroke: #ffffff;
+  stroke-dasharray: 0 100;
+  stroke-linecap: butt;
+}
+
+.pieChart span {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 82px;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #1e3a8a;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  opacity: 0;
+  transform: scale(0.92);
+  animation: chartCenterReveal 0.45s ease-out 0.25s forwards;
+}
+
+.chartLegend {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+}
+
+.pieSegment {
+  cursor: pointer;
+}
+
+.pieSegment:hover,
+.pieSegment:focus {
+  stroke-width: 20;
+  outline: none;
+}
+
+.pieTooltip {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  z-index: 2;
+  display: grid;
+  min-width: 132px;
+  padding: 8px 10px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.14);
+  color: #1e3a8a;
+  pointer-events: none;
+  transform: translate(-50%, 100%);
+}
+
+.pieTooltip strong {
+  overflow: hidden;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pieTooltip span {
+  display: block;
+  width: auto;
+  aspect-ratio: auto;
+  background: transparent;
+  color: #2563eb;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.chartLegend div {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.chartLegend span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.chartLegend strong {
+  overflow: hidden;
+  color: #1e3a8a;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chartLegend em {
+  color: #2563eb;
+  font-size: 13px;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.holdingsList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.holdingCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 74px;
+  gap: 12px;
+  align-items: center;
+  min-height: 76px;
+  padding: 12px 14px;
+  border: 1px solid #e7ecf2;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.holdingCardBody {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.holdingCard strong,
+.holdingCard span {
+  display: block;
+}
+
+.holdingCard strong {
+  overflow: hidden;
+  color: #111827;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.holdingCard span {
+  color: #6b7280;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.holdingCardMetric {
+  display: grid;
+  width: 74px;
+  margin: 0;
+  justify-items: end;
+}
+
+.holdingCardMetric dt {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+  width: 100%;
+}
+
+.holdingCardMetric dd {
+  margin: 0;
+  color: #2563eb;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  min-width: 54px;
+  text-align: right;
+}
+
+.holdingPagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.holdingPagination button {
+  min-width: 64px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #cbd3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #263445;
+  font-weight: 700;
+}
+
+.holdingPagination button:hover:not(:disabled) {
+  border-color: #93a4ba;
+  background: #f8fafc;
+}
+
+.holdingPagination button:disabled {
+  color: #a2adba;
+}
+
+.holdingPagination span {
+  min-width: 72px;
+  color: #4d5968;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes chartReveal {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: rotate(-90deg) scale(1);
+  }
+}
+
+@keyframes revealPieClockwise {
+  from {
+    stroke-dasharray: 0 100;
+  }
+
+  to {
+    stroke-dasharray: 100 0;
+  }
+}
+
+@keyframes segmentSettle {
+  from {
+    opacity: 0.72;
+    stroke-width: 15;
+  }
+
+  to {
+    opacity: 1;
+    stroke-width: 18;
+  }
+}
+
+@keyframes chartCenterReveal {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalSlideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(24px);
   }
 }
 
@@ -550,8 +975,28 @@ tbody tr:hover {
     flex-wrap: wrap;
   }
 
-  .infoGrid,
-  .priceGrid {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .holdingCard {
+    grid-template-columns: 1fr;
+  }
+
+  .holdingsChartWrap {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .pieChart {
+    width: min(156px, 100%);
+  }
+
+  .holdingCardMetric {
+    justify-items: start;
+  }
+
+  .holdingsList {
     grid-template-columns: 1fr;
   }
 }

@@ -1,0 +1,8 @@
+{"type":"server-started","port":49381,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:49381","screen_dir":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/content","state_dir":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/state"}
+{"type":"screen-added","file":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/content/modal-approach.html"}
+{"type":"screen-added","file":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/content/waiting-1.html"}
+{"type":"screen-added","file":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/content/modal-combined.html"}
+{"type":"screen-added","file":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/content/modal-blue.html"}
+{"type":"screen-added","file":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/content/modal-logo-hero.html"}
+{"type":"screen-added","file":"/home/yup/etf_reader/.superpowers/brainstorm/39841-1778756068/content/waiting-2.html"}
+{"type":"server-stopped","reason":"idle timeout"}
