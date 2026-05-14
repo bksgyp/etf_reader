@@ -16,6 +16,7 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 ETF_JSON_PATH = ROOT_DIR / "src" / "data" / "etfs.json"
 OUTPUT_JSON_PATH = ROOT_DIR / "src" / "data" / "etf_holdings.json"
 OUTPUT_MD_PATH = ROOT_DIR / "etf_holdings.md"
+PROGRESS_JSON_PATH = ROOT_DIR / "src" / "data" / "etf_holdings.progress.json"
 stock = None
 
 
@@ -62,6 +63,13 @@ def load_pykrx_stock():
 def write_json(payload):
     OUTPUT_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT_JSON_PATH.open("w", encoding="utf-8") as file:
+        json.dump(payload, file, ensure_ascii=False, indent=2)
+        file.write("\n")
+
+
+def write_progress(payload):
+    PROGRESS_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with PROGRESS_JSON_PATH.open("w", encoding="utf-8") as file:
         json.dump(payload, file, ensure_ascii=False, indent=2)
         file.write("\n")
 
@@ -119,7 +127,6 @@ def main():
             item = fetch_holdings(etf, args.date)
             payload["etfs"].append(item)
             payload["count"] += 1
-            print(f"[{index}/{len(etfs)}] {etf['단축코드']} {etf['한글종목약명']} {len(item['holdings'])} holdings")
         except Exception as error:
             payload["failed"].append(
                 {
@@ -128,7 +135,14 @@ def main():
                     "error": str(error),
                 }
             )
-            print(f"[{index}/{len(etfs)}] failed {etf['단축코드']} {etf['한글종목약명']}: {error}")
+            print(f"[{index}/{len(etfs)}] failed {etf['단축코드']} {etf['한글종목약명']}: {error}", flush=True)
+        else:
+            print(
+                f"[{index}/{len(etfs)}] {etf['단축코드']} {etf['한글종목약명']} {len(item['holdings'])} holdings",
+                flush=True,
+            )
+
+        write_progress(payload)
 
         if index < len(etfs):
             time.sleep(args.sleep)

@@ -1,4 +1,5 @@
 import { StrictMode, useEffect, useMemo, useState } from "react";
+import type { KeyboardEvent } from "react";
 import { createRoot } from "react-dom/client";
 import { Search, X } from "lucide-react";
 import etfs from "./data/etfs.json";
@@ -75,6 +76,13 @@ function getPaginationItems(currentPage: number, totalPages: number) {
   }
 
   return [1, "start-ellipsis", currentPage - 1, currentPage, currentPage + 1, "end-ellipsis", totalPages] as const;
+}
+
+function handleRowKeyDown(event: KeyboardEvent<HTMLTableRowElement>, etf: Etf, openPriceModal: (etf: Etf) => void) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    openPriceModal(etf);
+  }
 }
 
 function App() {
@@ -160,8 +168,7 @@ function App() {
           <p>{typedEtfs.length.toLocaleString("ko-KR")}개 ETF를 시장, 운용사, 종목명으로 검색합니다.</p>
         </div>
         <div className="searchControls">
-          <label className="categorySelect">
-            <span>검색 기준</span>
+          <label className="categorySelect" aria-label="검색 기준">
             <select
               value={searchCategory}
               onChange={(event) => setSearchCategory(event.target.value as SearchCategory)}
@@ -214,12 +221,19 @@ function App() {
           <tbody>
             {visibleResults.map((etf) => {
               return (
-                <tr key={etf.표준코드}>
+                <tr
+                  key={etf.표준코드}
+                  className="clickableRow"
+                  tabIndex={0}
+                  role="button"
+                  onClick={() => openPriceModal(etf)}
+                  onKeyDown={(event) => handleRowKeyDown(event, etf, openPriceModal)}
+                >
                   <td>
-                    <button className="nameButton" type="button" onClick={() => openPriceModal(etf)}>
+                    <span className="nameCell">
                       <span className="name">{etf.한글종목약명}</span>
                       <span className="fullName">{etf.기초지수명}</span>
-                    </button>
+                    </span>
                   </td>
                   <td className="code">{etf.단축코드}</td>
                   <td>{etf.운용사}</td>
@@ -290,6 +304,25 @@ function App() {
 
             {isSelectedLoading ? <p className="modalState">시세를 불러오는 중입니다.</p> : null}
             {!isSelectedLoading && priceError ? <p className="notice">{priceError}</p> : null}
+
+            <dl className="infoGrid">
+              <div>
+                <dt>종목</dt>
+                <dd>{selectedEtf.한글종목약명}</dd>
+              </div>
+              <div>
+                <dt>코드</dt>
+                <dd>{selectedEtf.단축코드}</dd>
+              </div>
+              <div>
+                <dt>운용사</dt>
+                <dd>{selectedEtf.운용사}</dd>
+              </div>
+              <div>
+                <dt>보수</dt>
+                <dd>{formatFee(selectedEtf.총보수)}</dd>
+              </div>
+            </dl>
 
             <dl className="priceGrid">
               <div>

@@ -75,11 +75,7 @@ p {
 
 .categorySelect {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  color: #4d5968;
-  font-size: 12px;
-  font-weight: 700;
+  align-items: stretch;
 }
 
 .categorySelect select {
@@ -232,6 +228,20 @@ tbody tr:hover {
   background: #f8fafc;
 }
 
+.clickableRow {
+  cursor: pointer;
+}
+
+.clickableRow:focus {
+  outline: 3px solid rgba(37, 99, 235, 0.18);
+  outline-offset: -3px;
+}
+
+.clickableRow:hover .name {
+  color: #1f4f99;
+  text-decoration: underline;
+}
+
 .name,
 .fullName {
   display: block;
@@ -258,18 +268,9 @@ tbody tr:hover {
   font-weight: 700;
 }
 
-.nameButton {
+.nameCell {
   display: block;
   width: 100%;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  text-align: left;
-}
-
-.nameButton:hover .name {
-  color: #1f4f99;
-  text-decoration: underline;
 }
 
 .numeric {
@@ -307,7 +308,9 @@ tbody tr:hover {
 }
 
 .priceModal {
-  width: min(520px, 100%);
+  width: min(900px, calc(100vw - 36px));
+  height: min(1400px, calc(100vh - 36px));
+  overflow-y: auto;
   border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 24px 70px rgba(15, 23, 42, 0.26);
@@ -355,6 +358,7 @@ tbody tr:hover {
   margin: 16px 20px 0;
 }
 
+.infoGrid,
 .priceGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -363,12 +367,18 @@ tbody tr:hover {
   padding: 20px;
 }
 
+.infoGrid {
+  padding-bottom: 0;
+}
+
+.infoGrid div,
 .priceGrid div {
   min-width: 0;
   padding: 14px;
   background: #f8fafc;
 }
 
+.infoGrid dt,
 .priceGrid dt {
   margin-bottom: 4px;
   color: #5a6573;
@@ -376,12 +386,21 @@ tbody tr:hover {
   font-weight: 700;
 }
 
+.infoGrid dd,
 .priceGrid dd {
   margin: 0;
   color: #111827;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
   font-weight: 800;
+}
+
+.priceGrid dd.positive {
+  color: #c2410c;
+}
+
+.priceGrid dd.negative {
+  color: #1d4ed8;
 }
 
 @keyframes spin {
@@ -428,6 +447,7 @@ tbody tr:hover {
     flex-wrap: wrap;
   }
 
+  .infoGrid,
   .priceGrid {
     grid-template-columns: 1fr;
   }
