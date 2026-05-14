@@ -1,9 +1,15 @@
+import { createHash } from "node:crypto";
+import { readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+
 const KIS_PROD_DOMAIN = "https://openapi.koreainvestment.com:9443";
 const KIS_VTS_DOMAIN = "https://openapivts.koreainvestment.com:29443";
 const MAX_CODES = 20;
 const PRICE_REQUEST_DELAY_MS = 350;
 const TOKEN_EXPIRY_BUFFER_MS = 60_000;
 const DEFAULT_TOKEN_TTL_MS = 23 * 60 * 60 * 1000;
+const TOKEN_CACHE_FILE = join(tmpdir(), "etf-reader-kis-token.json");
 
 let tokenCache = null;
 
@@ -39,21 +45,46 @@ function getTokenTtl(data) {
     : DEFAULT_TOKEN_TTL_MS;
 }
 
-function getCachedAccessToken(domain, appKey, appSecret) {
-  if (
-    tokenCache &&
-    tokenCache.domain === domain &&
-    tokenCache.appKey === appKey &&
-    tokenCache.appSecret === appSecret &&
-    tokenCache.expiresAt > Date.now() + TOKEN_EXPIRY_BUFFER_MS
-  ) {
+function getCredentialHash(domain, appKey, appSecret) {
+  return createHash("sha256").update(`${domain}:${appKey}:${appSecret}`).digest("hex");
+}
+
+function isUsableTokenCache(cache, credentialHash) {
+  return cache?.credentialHash === credentialHash && cache.expiresAt > Date.now() + TOKEN_EXPIRY_BUFFER_MS;
+}
+
+async function readTokenCache() {
+  try {
+    return JSON.parse(await readFile(TOKEN_CACHE_FILE, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+async function writeTokenCache(cache) {
+  try {
+    await writeFile(TOKEN_CACHE_FILE, JSON.stringify(cache), "utf8");
+  } catch {
+    // The in-memory cache still works if the serverless tmp directory is unavailable.
+  }
+}
+
+async function getCachedAccessToken(credentialHash) {
+  if (isUsableTokenCache(tokenCache, credentialHash)) {
+    return tokenCache.token;
+  }
+
+  const fileCache = await readTokenCache();
+
+  if (isUsableTokenCache(fileCache, credentialHash)) {
+    tokenCache = fileCache;
     return tokenCache.token;
   }
 
   return "";
 }
 
-async function requestAccessToken(domain, appKey, appSecret) {
+async function requestAccessToken(domain, appKey, appSecret, credentialHash) {
   const response = await fetch(`${domain}/oauth2/tokenP`, {
     method: "POST",
     headers: {
@@ -73,18 +104,19 @@ async function requestAccessToken(domain, appKey, appSecret) {
   }
 
   tokenCache = {
-    domain,
-    appKey,
-    appSecret,
+    credentialHash,
     token: data.access_token,
     expiresAt: Date.now() + getTokenTtl(data),
   };
+
+  await writeTokenCache(tokenCache);
 
   return tokenCache.token;
 }
 
 async function getAccessToken(domain, appKey, appSecret) {
-  return getCachedAccessToken(domain, appKey, appSecret) || requestAccessToken(domain, appKey, appSecret);
+  const credentialHash = getCredentialHash(domain, appKey, appSecret);
+  return (await getCachedAccessToken(credentialHash)) || requestAccessToken(domain, appKey, appSecret, credentialHash);
 }
 
 function normalizePrice(code, output) {

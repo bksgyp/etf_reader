@@ -1,7 +1,7 @@
 import { StrictMode, useEffect, useMemo, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { createRoot } from "react-dom/client";
-import { Search, X } from "lucide-react";
+import { RefreshCw, Search, X } from "lucide-react";
 import etfs from "./data/etfs.json";
 import type { Etf, EtfPrice, EtfPriceResponse } from "./types";
 import "./styles.css";
@@ -111,8 +111,8 @@ function App() {
   const lastResultNumber = Math.min(currentPage * pageSize, results.length);
   const paginationItems = getPaginationItems(currentPage, totalPages);
 
-  async function loadPrice(etf: Etf) {
-    if (prices[etf.단축코드] || prices[etf.표준코드]) {
+  async function loadPrice(etf: Etf, forceRefresh = false) {
+    if (!forceRefresh && (prices[etf.단축코드] || prices[etf.표준코드])) {
       return;
     }
 
@@ -120,7 +120,13 @@ function App() {
     setPriceError("");
 
     try {
-      const response = await fetch(`/api/etf-prices?codes=${encodeURIComponent(etf.단축코드)}`);
+      const searchParams = new URLSearchParams({ codes: etf.단축코드 });
+
+      if (forceRefresh) {
+        searchParams.set("refresh", String(Date.now()));
+      }
+
+      const response = await fetch(`/api/etf-prices?${searchParams.toString()}`);
 
       if (!response.ok) {
         const body = (await response.json().catch(() => null)) as { error?: string } | null;
@@ -297,9 +303,20 @@ function App() {
                   {selectedEtf.단축코드} · {selectedEtf.운용사}
                 </p>
               </div>
-              <button className="iconButton" type="button" onClick={closePriceModal} aria-label="모달 닫기">
-                <X aria-hidden="true" size={20} />
-              </button>
+              <div className="modalActions">
+                <button
+                  className="actionButton"
+                  type="button"
+                  onClick={() => loadPrice(selectedEtf, true)}
+                  disabled={isSelectedLoading}
+                >
+                  <RefreshCw aria-hidden="true" size={18} />
+                  {isSelectedLoading ? "갱신 중" : "시세 갱신"}
+                </button>
+                <button className="iconButton" type="button" onClick={closePriceModal} aria-label="모달 닫기">
+                  <X aria-hidden="true" size={20} />
+                </button>
+              </div>
             </header>
 
             {isSelectedLoading ? <p className="modalState">시세를 불러오는 중입니다.</p> : null}
