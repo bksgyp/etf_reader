@@ -126,6 +126,27 @@ p {
   color: #8995a4;
 }
 
+.priceButton {
+  min-width: 62px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid #cbd3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #263445;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.priceButton:hover:not(:disabled) {
+  border-color: #93a4ba;
+  background: #f8fafc;
+}
+
+.priceButton:disabled {
+  color: #8995a4;
+}
+
 .pagination {
   display: flex;
   justify-content: flex-end;

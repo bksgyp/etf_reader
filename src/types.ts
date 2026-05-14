@@ -38,5 +38,9 @@ export type EtfPrice = {
 export type EtfPriceResponse = {
   basDd: string;
   count: number;
+  failures?: Array<{
+    code: string;
+    error: string;
+  }>;
   prices: Record<string, EtfPrice>;
 };

@@ -1,6 +1,7 @@
 const KIS_PROD_DOMAIN = "https://openapi.koreainvestment.com:9443";
 const KIS_VTS_DOMAIN = "https://openapivts.koreainvestment.com:29443";
 const MAX_CODES = 20;
+const PRICE_REQUEST_DELAY_MS = 350;
 
 function getKisDomain() {
   return process.env.KIS_ENV === "vts" ? KIS_VTS_DOMAIN : KIS_PROD_DOMAIN;
@@ -15,6 +16,12 @@ function parseCodes(value) {
     0,
     MAX_CODES,
   );
+}
+
+function wait(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 async function getAccessToken(domain, appKey, appSecret) {
@@ -101,13 +108,31 @@ export default async function handler(request, response) {
   try {
     const domain = getKisDomain();
     const token = await getAccessToken(domain, appKey, appSecret);
-    const rows = await Promise.all(codes.map((code) => fetchPrice(domain, token, appKey, appSecret, code)));
+    const rows = [];
+    const failures = [];
+
+    for (const code of codes) {
+      try {
+        rows.push(await fetchPrice(domain, token, appKey, appSecret, code));
+      } catch (error) {
+        failures.push({
+          code,
+          error: error instanceof Error ? error.message : "KIS price request failed.",
+        });
+      }
+
+      if (code !== codes.at(-1)) {
+        await wait(PRICE_REQUEST_DELAY_MS);
+      }
+    }
+
     const prices = Object.fromEntries(rows.map((row) => [row.code, row]));
 
     response.setHeader("Cache-Control", "s-maxage=15, stale-while-revalidate=45");
     response.status(200).json({
       basDd: "",
       count: rows.length,
+      failures,
       prices,
     });
   } catch (error) {

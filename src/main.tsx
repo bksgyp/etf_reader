@@ -1,6 +1,6 @@
 import { StrictMode, useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { RefreshCw, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import etfs from "./data/etfs.json";
 import type { Etf, EtfPrice, EtfPriceResponse } from "./types";
 import "./styles.css";
@@ -74,47 +74,46 @@ function sortByKoreanName(left: Etf, right: Etf) {
 function App() {
   const [query, setQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [priceData, setPriceData] = useState<EtfPriceResponse | null>(null);
+  const [prices, setPrices] = useState<Record<string, EtfPrice>>({});
   const [priceError, setPriceError] = useState("");
-  const [isLoadingPrices, setIsLoadingPrices] = useState(false);
+  const [loadingCode, setLoadingCode] = useState("");
   const results = useMemo(() => typedEtfs.filter((etf) => matchesQuery(etf, query)).sort(sortByKoreanName), [query]);
   const totalPages = Math.max(1, Math.ceil(results.length / pageSize));
   const visibleResults = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
     return results.slice(startIndex, startIndex + pageSize);
   }, [currentPage, results]);
-  const visibleCodes = useMemo(() => visibleResults.map((etf) => etf.단축코드).join(","), [visibleResults]);
   const firstResultNumber = results.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const lastResultNumber = Math.min(currentPage * pageSize, results.length);
 
-  async function loadPrices(codes: string) {
-    if (!codes) {
-      setPriceData(null);
+  async function loadPrice(etf: Etf) {
+    if (prices[etf.단축코드] || prices[etf.표준코드]) {
       return;
     }
 
-    setIsLoadingPrices(true);
+    setLoadingCode(etf.단축코드);
     setPriceError("");
 
     try {
-      const response = await fetch(`/api/etf-prices?codes=${encodeURIComponent(codes)}`);
+      const response = await fetch(`/api/etf-prices?codes=${encodeURIComponent(etf.단축코드)}`);
 
       if (!response.ok) {
         const body = (await response.json().catch(() => null)) as { error?: string } | null;
         throw new Error(body?.error ?? "ETF 가격 정보를 불러오지 못했습니다.");
       }
 
-      setPriceData((await response.json()) as EtfPriceResponse);
+      const data = (await response.json()) as EtfPriceResponse;
+      setPrices((currentPrices) => ({ ...currentPrices, ...data.prices }));
+
+      if (data.failures?.length) {
+        setPriceError(`${etf.한글종목약명} 시세를 불러오지 못했습니다.`);
+      }
     } catch (error) {
       setPriceError(error instanceof Error ? error.message : "ETF 가격 정보를 불러오지 못했습니다.");
     } finally {
-      setIsLoadingPrices(false);
+      setLoadingCode("");
     }
   }
-
-  useEffect(() => {
-    void loadPrices(visibleCodes);
-  }, [visibleCodes]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -131,10 +130,7 @@ function App() {
       <section className="toolbar" aria-label="ETF 검색">
         <div>
           <h1>대한민국 ETF 검색</h1>
-          <p>
-            {typedEtfs.length.toLocaleString("ko-KR")}개 ETF를 코드, 이름, 지수, 운용사로 검색합니다.
-            {priceData?.basDd ? ` 시세 기준일은 ${formatBasDd(priceData.basDd)}입니다.` : ""}
-          </p>
+          <p>{typedEtfs.length.toLocaleString("ko-KR")}개 ETF를 코드, 이름, 지수, 운용사로 검색합니다.</p>
         </div>
         <label className="searchBox">
           <Search aria-hidden="true" size={20} />
@@ -158,15 +154,6 @@ function App() {
               : ""}
           </span>
         </div>
-        <button
-          className="refreshButton"
-          type="button"
-          onClick={() => loadPrices(visibleCodes)}
-          disabled={isLoadingPrices}
-        >
-          <RefreshCw aria-hidden="true" size={16} className={isLoadingPrices ? "spinning" : ""} />
-          시세 갱신
-        </button>
       </section>
 
       <nav className="pagination" aria-label="검색 결과 페이지">
@@ -194,6 +181,7 @@ function App() {
               <th>종목</th>
               <th>코드</th>
               <th>운용사</th>
+              <th>시세</th>
               <th>종가</th>
               <th>등락률</th>
               <th>NAV</th>
@@ -206,8 +194,9 @@ function App() {
           </thead>
           <tbody>
             {visibleResults.map((etf) => {
-              const price = priceData ? findPrice(etf, priceData.prices) : undefined;
+              const price = findPrice(etf, prices);
               const changeTone = price ? changeClassName(price.change) : "";
+              const isLoading = loadingCode === etf.단축코드;
 
               return (
                 <tr key={etf.표준코드}>
@@ -217,6 +206,16 @@ function App() {
                   </td>
                   <td className="code">{etf.단축코드}</td>
                   <td>{etf.운용사}</td>
+                  <td>
+                    <button
+                      className="priceButton"
+                      type="button"
+                      onClick={() => loadPrice(etf)}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "조회 중" : price ? "조회됨" : "조회"}
+                    </button>
+                  </td>
                   <td className="numeric">{price ? formatNumber(price.close) : "-"}</td>
                   <td className={`numeric ${changeTone}`}>
                     {price ? `${formatNumber(price.change)} / ${price.changeRate}%` : "-"}
