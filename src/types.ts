@@ -44,3 +44,30 @@ export type EtfPriceResponse = {
   }>;
   prices: Record<string, EtfPrice>;
 };
+
+export type EtfHolding = {
+  componentCode: string;
+  componentName?: string;
+  contracts: number | null;
+  amount: number | null;
+  weight: number | null;
+};
+
+export type EtfHoldingItem = {
+  etfCode: string;
+  etfName: string;
+  date: string;
+  holdings: EtfHolding[];
+};
+
+export type EtfHoldingPayload = {
+  source: string;
+  date: string;
+  count: number;
+  failed: Array<{
+    etfCode: string;
+    etfName: string;
+    error: string;
+  }>;
+  etfs: EtfHoldingItem[];
+};

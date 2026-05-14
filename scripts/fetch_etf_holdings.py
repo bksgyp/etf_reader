@@ -18,6 +18,7 @@ OUTPUT_JSON_PATH = ROOT_DIR / "src" / "data" / "etf_holdings.json"
 OUTPUT_MD_PATH = ROOT_DIR / "etf_holdings.md"
 PROGRESS_JSON_PATH = ROOT_DIR / "src" / "data" / "etf_holdings.progress.json"
 stock = None
+component_name_cache = {}
 
 
 def today_yyyymmdd():
@@ -31,9 +32,25 @@ def load_etfs(limit):
     return etfs[:limit] if limit else etfs
 
 
+def get_component_name(component_code):
+    if not component_code.isdigit() or component_code == "010010":
+        return ""
+
+    if component_code not in component_name_cache:
+        try:
+            component_name_cache[component_code] = stock.get_market_ticker_name(component_code)
+        except Exception:
+            component_name_cache[component_code] = ""
+
+    return component_name_cache[component_code]
+
+
 def normalize_holding(row):
+    component_code = str(row.name).zfill(6)
+
     return {
-        "componentCode": str(row.name).zfill(6),
+        "componentCode": component_code,
+        "componentName": get_component_name(component_code),
         "contracts": None if row.get("계약수") is None else float(row.get("계약수")),
         "amount": None if row.get("금액") is None else int(row.get("금액")),
         "weight": None if row.get("비중") is None else round(float(row.get("비중")), 2),
@@ -76,8 +93,8 @@ def write_progress(payload):
 
 def write_markdown(payload):
     lines = [
-        "| ETF단축코드 | ETF명 | 기준일 | 구성종목코드 | 계약수 | 금액 | 비중 |",
-        "| --- | --- | --- | --- | ---: | ---: | ---: |",
+        "| ETF단축코드 | ETF명 | 기준일 | 구성종목코드 | 구성종목명 | 계약수 | 금액 | 비중 |",
+        "| --- | --- | --- | --- | --- | ---: | ---: | ---: |",
     ]
 
     for etf in payload["etfs"]:
@@ -89,6 +106,7 @@ def write_markdown(payload):
                         etf["etfName"],
                         etf["date"],
                         holding["componentCode"],
+                        holding.get("componentName", ""),
                         "" if holding["contracts"] is None else str(holding["contracts"]),
                         "" if holding["amount"] is None else str(holding["amount"]),
                         "" if holding["weight"] is None else str(holding["weight"]),

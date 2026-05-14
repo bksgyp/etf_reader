@@ -3,24 +3,67 @@ import type { KeyboardEvent } from "react";
 import { createRoot } from "react-dom/client";
 import { RefreshCw, Search, X } from "lucide-react";
 import etfs from "./data/etfs.json";
-import type { Etf, EtfPrice, EtfPriceResponse } from "./types";
+import holdings from "./data/etf_holdings.json";
+import type { Etf, EtfHolding, EtfHoldingPayload, EtfPrice, EtfPriceResponse } from "./types";
 import "./styles.css";
 
 const typedEtfs = etfs as Etf[];
+const typedHoldings = holdings as EtfHoldingPayload;
 const searchCategories = {
   market: { label: "시장", fields: ["기초시장분류"] },
   issuer: { label: "운용사", fields: ["운용사"] },
   name: { label: "종목명", fields: ["단축코드", "한글종목명", "한글종목약명", "영문종목명"] },
+  holding: { label: "구성종목", fields: [] },
 } satisfies Record<string, { label: string; fields: Array<keyof Etf> }>;
 type SearchCategory = keyof typeof searchCategories;
+const tableColumns = [
+  { key: "name", label: "종목" },
+  { key: "code", label: "코드" },
+  { key: "issuer", label: "운용사" },
+  { key: "market", label: "시장" },
+  { key: "asset", label: "자산" },
+  { key: "fee", label: "총보수" },
+  { key: "tax", label: "과세유형" },
+  { key: "holding", label: "구성종목" },
+] as const;
+type TableColumnKey = (typeof tableColumns)[number]["key"];
+type ColumnFilters = Record<TableColumnKey, string>;
 const pageSize = 20;
 const nameCollator = new Intl.Collator("ko-KR", { numeric: true, sensitivity: "base" });
+const emptyColumnFilters = Object.fromEntries(tableColumns.map((column) => [column.key, ""])) as ColumnFilters;
+const holdingsByEtfCode = Object.fromEntries(typedHoldings.etfs.map((etf) => [etf.etfCode, etf.holdings]));
 
 function normalize(value: string) {
   return value.trim().toLocaleLowerCase("ko-KR");
 }
 
+function getEtfHoldings(etf: Etf) {
+  return holdingsByEtfCode[etf.단축코드] ?? [];
+}
+
+function formatHolding(holding: EtfHolding) {
+  return holding.componentName ? `${holding.componentName} ${holding.componentCode}` : holding.componentCode;
+}
+
+function getMatchingHoldings(etf: Etf, query: string) {
+  const normalizedQuery = normalize(query);
+
+  if (!normalizedQuery) {
+    return [];
+  }
+
+  return getEtfHoldings(etf).filter((holding) => normalize(formatHolding(holding)).includes(normalizedQuery));
+}
+
+function matchesHoldingQuery(etf: Etf, query: string) {
+  return !normalize(query) || getMatchingHoldings(etf, query).length > 0;
+}
+
 function matchesQuery(etf: Etf, query: string, category: SearchCategory) {
+  if (category === "holding") {
+    return matchesHoldingQuery(etf, query);
+  }
+
   const normalizedQuery = normalize(query);
 
   if (!normalizedQuery) {
@@ -62,6 +105,54 @@ function sortByKoreanName(left: Etf, right: Etf) {
   return nameCollator.compare(left.한글종목약명, right.한글종목약명);
 }
 
+function getHoldingSummary(etf: Etf, query = "") {
+  const etfHoldings = getEtfHoldings(etf);
+
+  if (etfHoldings.length === 0) {
+    return "-";
+  }
+
+  const matchingHoldings = getMatchingHoldings(etf, query);
+  const visibleHoldings = matchingHoldings.length > 0 ? matchingHoldings : etfHoldings.slice(0, 3);
+  const hiddenCount = (matchingHoldings.length > 0 ? matchingHoldings : etfHoldings).length - visibleHoldings.length;
+  const suffix = hiddenCount > 0 ? ` 외 ${hiddenCount.toLocaleString("ko-KR")}개` : "";
+
+  return `${visibleHoldings.map(formatHolding).join(", ")}${suffix}`;
+}
+
+function getColumnValue(etf: Etf, key: TableColumnKey, holdingQuery = "") {
+  switch (key) {
+    case "name":
+      return `${etf.한글종목약명} ${etf.한글종목명} ${etf.영문종목명} ${etf.기초지수명}`;
+    case "code":
+      return `${etf.단축코드} ${etf.표준코드}`;
+    case "issuer":
+      return etf.운용사;
+    case "market":
+      return etf.기초시장분류;
+    case "asset":
+      return etf.기초자산분류;
+    case "fee":
+      return formatFee(etf.총보수);
+    case "tax":
+      return etf.과세유형;
+    case "holding":
+      return getHoldingSummary(etf, holdingQuery);
+  }
+}
+
+function matchesColumnFilters(etf: Etf, columnFilters: ColumnFilters) {
+  return tableColumns.every((column) => {
+    const normalizedFilter = normalize(columnFilters[column.key]);
+
+    if (!normalizedFilter) {
+      return true;
+    }
+
+    return normalize(getColumnValue(etf, column.key, columnFilters.holding)).includes(normalizedFilter);
+  });
+}
+
 function getPaginationItems(currentPage: number, totalPages: number) {
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, index) => index + 1);
@@ -88,6 +179,7 @@ function handleRowKeyDown(event: KeyboardEvent<HTMLTableRowElement>, etf: Etf, o
 function App() {
   const [query, setQuery] = useState("");
   const [searchCategory, setSearchCategory] = useState<SearchCategory>("name");
+  const [columnFilters, setColumnFilters] = useState<ColumnFilters>(emptyColumnFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [prices, setPrices] = useState<Record<string, EtfPrice>>({});
   const [priceError, setPriceError] = useState("");
@@ -97,10 +189,20 @@ function App() {
   const selectedChangeTone = selectedPrice ? changeClassName(selectedPrice.change) : "";
   const isSelectedLoading = selectedEtf ? loadingCode === selectedEtf.단축코드 : false;
   const searchPlaceholder =
-    searchCategory === "market" ? "예: 국내, 해외" : searchCategory === "issuer" ? "예: 삼성, 미래에셋" : "예: S&P500, 379780, RISE";
+    searchCategory === "market"
+      ? "예: 국내, 해외"
+      : searchCategory === "issuer"
+        ? "예: 삼성, 미래에셋"
+        : searchCategory === "holding"
+          ? "예: 006400, 삼성SDI"
+          : "예: S&P500, 379780, RISE";
   const results = useMemo(
-    () => typedEtfs.filter((etf) => matchesQuery(etf, query, searchCategory)).sort(sortByKoreanName),
-    [query, searchCategory],
+    () =>
+      typedEtfs
+        .filter((etf) => matchesQuery(etf, query, searchCategory))
+        .filter((etf) => matchesColumnFilters(etf, columnFilters))
+        .sort(sortByKoreanName),
+    [columnFilters, query, searchCategory],
   );
   const totalPages = Math.max(1, Math.ceil(results.length / pageSize));
   const visibleResults = useMemo(() => {
@@ -110,6 +212,7 @@ function App() {
   const firstResultNumber = results.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const lastResultNumber = Math.min(currentPage * pageSize, results.length);
   const paginationItems = getPaginationItems(currentPage, totalPages);
+  const hasColumnFilters = Object.values(columnFilters).some((filter) => filter.trim());
 
   async function loadPrice(etf: Etf, forceRefresh = false) {
     if (!forceRefresh && (prices[etf.단축코드] || prices[etf.표준코드])) {
@@ -156,9 +259,17 @@ function App() {
     setSelectedEtf(null);
   }
 
+  function updateColumnFilter(key: TableColumnKey, value: string) {
+    setColumnFilters((currentFilters) => ({ ...currentFilters, [key]: value }));
+  }
+
+  function clearColumnFilters() {
+    setColumnFilters(emptyColumnFilters);
+  }
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [query, searchCategory]);
+  }, [columnFilters, query, searchCategory]);
 
   useEffect(() => {
     if (currentPage > totalPages) {
@@ -209,19 +320,34 @@ function App() {
               : ""}
           </span>
         </div>
+        {hasColumnFilters ? (
+          <button className="clearFiltersButton" type="button" onClick={clearColumnFilters}>
+            필터 초기화
+          </button>
+        ) : null}
       </section>
 
       <section className="tableWrap" aria-label="ETF 검색 결과">
         <table>
           <thead>
             <tr>
-              <th>종목</th>
-              <th>코드</th>
-              <th>운용사</th>
-              <th>시장</th>
-              <th>자산</th>
-              <th>총보수</th>
-              <th>과세유형</th>
+              {tableColumns.map((column) => (
+                <th key={column.key}>{column.label}</th>
+              ))}
+            </tr>
+            <tr className="filterRow">
+              {tableColumns.map((column) => (
+                <th key={column.key}>
+                  <input
+                    type="search"
+                    value={columnFilters[column.key]}
+                    onChange={(event) => updateColumnFilter(column.key, event.target.value)}
+                    onClick={(event) => event.stopPropagation()}
+                    placeholder={`${column.label} 필터`}
+                    aria-label={`${column.label} 컬럼 필터`}
+                  />
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -247,6 +373,7 @@ function App() {
                   <td>{etf.기초자산분류}</td>
                   <td>{formatFee(etf.총보수)}</td>
                   <td>{etf.과세유형}</td>
+                  <td className="holdingCell">{getHoldingSummary(etf, searchCategory === "holding" ? query : columnFilters.holding)}</td>
                 </tr>
               );
             })}

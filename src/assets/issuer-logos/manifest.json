@@ -1,0 +1,255 @@
+[
+  {
+    "status": "failed",
+    "name": "교보악사자산운용",
+    "slug": "kyobo-axa",
+    "homepage": "https://www.kyoboaxa-im.co.kr/",
+    "error": "no logo candidate from www.kyoboaxa-im.co.kr"
+  },
+  {
+    "status": "downloaded",
+    "name": "대신자산운용",
+    "slug": "daishin",
+    "homepage": "https://asset.daishin.com/",
+    "file": "daishin.png",
+    "source": "https://asset.daishin.com/ko/images//common/logo.png",
+    "contentType": "image/png",
+    "bytes": 19038
+  },
+  {
+    "status": "downloaded",
+    "name": "더제이자산운용",
+    "slug": "thej",
+    "homepage": "https://www.thejasset.com/",
+    "file": "thej.svg",
+    "source": "https://www.thejasset.com/images/common/logo.svg",
+    "contentType": "image/svg+xml",
+    "bytes": 5512
+  },
+  {
+    "status": "downloaded",
+    "name": "디비자산운용",
+    "slug": "db",
+    "homepage": "https://www.db-asset.co.kr/",
+    "file": "db.png",
+    "source": "https://db-asset.com/assets/img/front/com/site-logo.png",
+    "contentType": "image/png",
+    "bytes": 17947
+  },
+  {
+    "status": "downloaded",
+    "name": "마이다스에셋",
+    "slug": "midas",
+    "homepage": "https://www.midasasset.com/",
+    "file": "midas.png",
+    "source": "https://midasasset.com/wp-content/themes/midasasset_new/images/img_footer_logo.png",
+    "contentType": "image/png",
+    "bytes": 2992
+  },
+  {
+    "status": "failed",
+    "name": "미래에셋자산운용",
+    "slug": "miraeasset",
+    "homepage": "https://www.tigeretf.com/",
+    "error": "no logo candidate from www.tigeretf.com"
+  },
+  {
+    "status": "failed",
+    "name": "브이아이자산운용",
+    "slug": "vi",
+    "homepage": "https://www.viamc.kr/",
+    "error": "fetch failed"
+  },
+  {
+    "status": "downloaded",
+    "name": "비엔케이자산운용",
+    "slug": "bnk",
+    "homepage": "https://www.bnkasset.co.kr/",
+    "file": "bnk.jpg",
+    "source": "https://www.bnkasset.co.kr/images/main/logo_2024.jpg",
+    "contentType": "image/jpeg",
+    "bytes": 10584
+  },
+  {
+    "status": "downloaded",
+    "name": "삼성액티브자산운용",
+    "slug": "samsung-active",
+    "homepage": "https://www.samsungactive.co.kr/",
+    "file": "samsung-active.svg",
+    "source": "https://www.samsungactive.co.kr/assets/icons/logo/logo.svg",
+    "contentType": "image/svg+xml",
+    "bytes": 24852
+  },
+  {
+    "status": "downloaded",
+    "name": "삼성자산운용",
+    "slug": "samsung",
+    "homepage": "https://www.kodex.com/",
+    "file": "samsung.svg",
+    "source": "https://www.samsungfund.com/assets/icons/logo/new/logo_kodex_ko.svg",
+    "contentType": "image/svg+xml",
+    "bytes": 4870
+  },
+  {
+    "status": "downloaded",
+    "name": "신한자산운용",
+    "slug": "shinhan",
+    "homepage": "https://www.soletf.com/",
+    "file": "shinhan.svg",
+    "source": "https://www.soletf.com/static/pc/img/common/footer-logo.svg",
+    "contentType": "image/svg+xml;charset=UTF-8",
+    "bytes": 5441
+  },
+  {
+    "status": "downloaded",
+    "name": "아이비케이자산운용",
+    "slug": "ibk",
+    "homepage": "https://www.ibkasset.com/",
+    "file": "ibk.svg",
+    "source": "https://www.ibkasset.com/resources/image/logo/logo_w_ibk_assets.svg",
+    "contentType": "image/svg+xml;charset=UTF-8",
+    "bytes": 11570
+  },
+  {
+    "status": "failed",
+    "name": "아이엠에셋자산운용",
+    "slug": "im",
+    "homepage": "https://www.im-fund.com/",
+    "error": "fetch failed"
+  },
+  {
+    "status": "failed",
+    "name": "에셋플러스자산운용",
+    "slug": "assetplus",
+    "homepage": "https://www.assetplus.co.kr/",
+    "error": "no logo candidate from www.assetplus.co.kr"
+  },
+  {
+    "status": "downloaded",
+    "name": "엔에이치아문디자산운용",
+    "slug": "nh-amundi",
+    "homepage": "https://www.hanaroetf.com/",
+    "file": "nh-amundi.png",
+    "source": "https://www.hanaroetf.com/assets/etf/global/images/txt/h1_hanaroETF01.png",
+    "contentType": "image/png",
+    "bytes": 7082
+  },
+  {
+    "status": "downloaded",
+    "name": "우리자산운용",
+    "slug": "woori",
+    "homepage": "https://www.wooriam.kr/",
+    "file": "woori.png",
+    "source": "https://www.wooriam.kr/assets/icon/logo.png",
+    "contentType": "image/png",
+    "bytes": 9111
+  },
+  {
+    "status": "failed",
+    "name": "유리에셋",
+    "slug": "yurie",
+    "homepage": "https://www.yurieasset.co.kr/",
+    "error": "no logo candidate from www.yurieasset.co.kr"
+  },
+  {
+    "status": "downloaded",
+    "name": "케이비자산운용",
+    "slug": "kb",
+    "homepage": "https://www.k-etf.com/",
+    "file": "kb.svg",
+    "source": "https://www.k-etf.com/assets/image/logo_light.svg",
+    "contentType": "image/svg+xml",
+    "bytes": 5811
+  },
+  {
+    "status": "downloaded",
+    "name": "케이씨지아이자산운용",
+    "slug": "kcgi",
+    "homepage": "https://kcgiam.com/",
+    "file": "kcgi.png",
+    "source": "https://kcgiam.com/images/common/etf_logo.png",
+    "contentType": "image/png",
+    "bytes": 9184
+  },
+  {
+    "status": "failed",
+    "name": "키움투자자산운용",
+    "slug": "kiwoom",
+    "homepage": "https://www.kiwoometf.com/",
+    "error": "fetch failed"
+  },
+  {
+    "status": "downloaded",
+    "name": "타임폴리오자산운용",
+    "slug": "timefolio",
+    "homepage": "https://www.timefolio.co.kr/",
+    "file": "timefolio.png",
+    "source": "https://www.timefolio.co.kr/images/common/logo1.png",
+    "contentType": "image/png",
+    "bytes": 4697
+  },
+  {
+    "status": "failed",
+    "name": "트러스톤자산운용",
+    "slug": "truston",
+    "homepage": "https://www.trustonasset.com/",
+    "error": "no logo candidate from www.trustonasset.com"
+  },
+  {
+    "status": "downloaded",
+    "name": "하나자산운용",
+    "slug": "hana",
+    "homepage": "https://www.1qetf.com/",
+    "file": "hana.svg",
+    "source": "https://www.1qetf.com/resource/images/header_logo_new_new.svg",
+    "contentType": "image/svg+xml",
+    "bytes": 1708
+  },
+  {
+    "status": "downloaded",
+    "name": "한국투자밸류자산운용",
+    "slug": "korea-value",
+    "homepage": "https://vam.koreainvestment.com/",
+    "file": "korea-value.png",
+    "source": "https://vam.koreainvestment.com/images_new/logo.png",
+    "contentType": "image/png",
+    "bytes": 1415
+  },
+  {
+    "status": "downloaded",
+    "name": "한국투자신탁운용",
+    "slug": "korea-investment",
+    "homepage": "https://www.aceetf.co.kr/",
+    "file": "korea-investment.svg",
+    "source": "https://www.aceetf.co.kr/static/images/logo_ace_blue_fit.svg",
+    "contentType": "image/svg+xml",
+    "bytes": 3195
+  },
+  {
+    "status": "downloaded",
+    "name": "한화자산운용",
+    "slug": "hanwha",
+    "homepage": "https://www.plusetf.co.kr/",
+    "file": "hanwha.svg",
+    "source": "https://www.plusetf.co.kr/static/ClientUI/images/common/pc/logo-white.svg",
+    "contentType": "image/svg+xml",
+    "bytes": 2675
+  },
+  {
+    "status": "downloaded",
+    "name": "현대자산운용",
+    "slug": "hyundai",
+    "homepage": "https://www.hyundaiam.com/",
+    "file": "hyundai.png",
+    "source": "https://www.hyundaiam.com/asset/img/common/logo_h1_diff_type.png",
+    "contentType": "image/png",
+    "bytes": 5603
+  },
+  {
+    "status": "failed",
+    "name": "흥국자산운용",
+    "slug": "heungkuk",
+    "homepage": "https://www.hkfund.co.kr/",
+    "error": "fetch failed"
+  }
+]

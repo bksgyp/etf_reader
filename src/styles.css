@@ -132,6 +132,21 @@ p {
   font-size: 20px;
 }
 
+.clearFiltersButton {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #cbd3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #263445;
+  font-weight: 700;
+}
+
+.clearFiltersButton:hover {
+  border-color: #93a4ba;
+  background: #f8fafc;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -197,7 +212,7 @@ p {
 
 table {
   width: 100%;
-  min-width: 880px;
+  min-width: 1180px;
   border-collapse: collapse;
 }
 
@@ -218,6 +233,30 @@ th {
   color: #384555;
   font-size: 13px;
   font-weight: 700;
+}
+
+.filterRow th {
+  top: 45px;
+  padding: 8px 10px;
+  background: #f8fafc;
+}
+
+.filterRow input {
+  width: 100%;
+  min-width: 96px;
+  height: 34px;
+  padding: 0 9px;
+  border: 1px solid #cbd3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #17202a;
+  font-size: 13px;
+}
+
+.filterRow input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: 0;
 }
 
 td {
@@ -271,6 +310,14 @@ tbody tr:hover {
 .nameCell {
   display: block;
   width: 100%;
+}
+
+.holdingCell {
+  max-width: 280px;
+  overflow: hidden;
+  color: #4d5968;
+  font-size: 13px;
+  text-overflow: ellipsis;
 }
 
 .numeric {
