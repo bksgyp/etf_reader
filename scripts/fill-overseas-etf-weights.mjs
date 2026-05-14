@@ -7,6 +7,7 @@ const HOLDINGS_JSON_PATH = path.join(ROOT_DIR, "src", "data", "etf_holdings.json
 const PROGRESS_JSON_PATH = path.join(ROOT_DIR, "src", "data", "etf_holdings.progress.json");
 const PUBLIC_JSON_PATH = path.join(ROOT_DIR, "public", "data", "etf_holdings.json");
 const K_ETF_API_BASE = "https://www.k-etf.com/api/v0";
+const TARGET_MARKETS = new Set(["해외", "국내&해외"]);
 
 const targetDate = process.argv.find((arg) => arg.startsWith("--date="))?.slice("--date=".length);
 const sleepMs = Number(process.argv.find((arg) => arg.startsWith("--sleep="))?.slice("--sleep=".length) ?? 150);
@@ -113,10 +114,12 @@ const findMatch = (sourceName, holdings, index) => {
 
 const etfs = readJson(ETF_JSON_PATH);
 const payload = readJson(HOLDINGS_JSON_PATH);
-const overseasCodes = new Set(etfs.filter((etf) => etf["기초시장분류"] === "해외").map((etf) => etf["단축코드"]));
+const targetEtfCodes = new Set(
+  etfs.filter((etf) => TARGET_MARKETS.has(etf["기초시장분류"])).map((etf) => etf["단축코드"]),
+);
 
 const stats = {
-  overseasEtfs: 0,
+  targetEtfs: 0,
   fetchedEtfs: 0,
   updatedRows: 0,
   unmatchedRows: 0,
@@ -125,9 +128,9 @@ const stats = {
 };
 
 for (const [position, etf] of payload.etfs.entries()) {
-  if (!overseasCodes.has(etf.etfCode)) continue;
+  if (!targetEtfCodes.has(etf.etfCode)) continue;
 
-  stats.overseasEtfs += 1;
+  stats.targetEtfs += 1;
   delete etf.weightSource;
 
   try {
@@ -187,8 +190,9 @@ for (const [position, etf] of payload.etfs.entries()) {
   await sleep(sleepMs);
 }
 
-payload.overseasWeightEnrichment = {
+payload.foreignMarketWeightEnrichment = {
   source: "https://www.k-etf.com/api/v0/holds/top20holds/indates",
+  targetMarkets: [...TARGET_MARKETS],
   updatedAt: new Date().toISOString(),
   ...stats,
 };
