@@ -1,0 +1,136 @@
+{
+  "source": "pykrx.stock.get_etf_portfolio_deposit_file",
+  "date": "20260514",
+  "count": 2,
+  "failed": [],
+  "etfs": [
+    {
+      "etfCode": "495710",
+      "etfName": "BNK 26-06 특수채(AAA이상)액티브",
+      "date": "20260514",
+      "holdings": [
+        {
+          "componentCode": "10202G",
+          "contracts": 0.0,
+          "amount": 28652449,
+          "weight": 0.0
+        },
+        {
+          "componentCode": "10505G",
+          "contracts": 0.0,
+          "amount": 9579506,
+          "weight": 0.0
+        },
+        {
+          "componentCode": "10501G",
+          "contracts": 0.0,
+          "amount": 19098841,
+          "weight": 0.0
+        },
+        {
+          "componentCode": "51604G",
+          "contracts": 0.0,
+          "amount": 9535602,
+          "weight": 0.0
+        },
+        {
+          "componentCode": "56402G",
+          "contracts": 0.0,
+          "amount": 9539676,
+          "weight": 0.0
+        },
+        {
+          "componentCode": "010010",
+          "contracts": 0.0,
+          "amount": 0,
+          "weight": 0.0
+        }
+      ]
+    },
+    {
+      "etfCode": "466810",
+      "etfName": "BNK 2차전지양극재",
+      "date": "20260514",
+      "holdings": [
+        {
+          "componentCode": "006400",
+          "contracts": 90.0,
+          "amount": 57060000,
+          "weight": 13.76
+        },
+        {
+          "componentCode": "005490",
+          "contracts": 90.0,
+          "amount": 43065000,
+          "weight": 10.53
+        },
+        {
+          "componentCode": "066970",
+          "contracts": 220.0,
+          "amount": 37180000,
+          "weight": 9.08
+        },
+        {
+          "componentCode": "086520",
+          "contracts": 248.0,
+          "amount": 33480000,
+          "weight": 8.48
+        },
+        {
+          "componentCode": "247540",
+          "contracts": 160.0,
+          "amount": 31536000,
+          "weight": 8.04
+        },
+        {
+          "componentCode": "003670",
+          "contracts": 126.0,
+          "amount": 31689000,
+          "weight": 7.59
+        },
+        {
+          "componentCode": "096770",
+          "contracts": 249.0,
+          "amount": 32295300,
+          "weight": 7.59
+        },
+        {
+          "componentCode": "450080",
+          "contracts": 452.0,
+          "amount": 30645600,
+          "weight": 7.5
+        },
+        {
+          "componentCode": "005070",
+          "contracts": 538.0,
+          "amount": 29805200,
+          "weight": 7.3
+        },
+        {
+          "componentCode": "051910",
+          "contracts": 76.0,
+          "amount": 29450000,
+          "weight": 7.17
+        },
+        {
+          "componentCode": "373220",
+          "contracts": 62.0,
+          "amount": 26660000,
+          "weight": 6.59
+        },
+        {
+          "componentCode": "005420",
+          "contracts": 1570.0,
+          "amount": 24256500,
+          "weight": 6.07
+        },
+        {
+          "componentCode": "010010",
+          "contracts": 0.0,
+          "amount": 0,
+          "weight": 0.31
+        }
+      ]
+    }
+  ]
+}

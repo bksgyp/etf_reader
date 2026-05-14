@@ -17,7 +17,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -66,6 +67,37 @@ p {
   background: #ffffff;
 }
 
+.searchControls {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.categorySelect {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #4d5968;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.categorySelect select {
+  width: 100%;
+  height: 48px;
+  padding: 0 10px;
+  border: 1px solid #cbd3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #17202a;
+}
+
+.categorySelect select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: 0;
+}
+
 .searchBox:focus-within {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
@@ -104,59 +136,16 @@ p {
   font-size: 20px;
 }
 
-.refreshButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 36px;
-  padding: 0 12px;
-  border: 1px solid #cbd3dd;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #263445;
-  font-weight: 700;
-}
-
-.refreshButton:hover:not(:disabled) {
-  border-color: #93a4ba;
-  background: #f8fafc;
-}
-
-.refreshButton:disabled {
-  color: #8995a4;
-}
-
-.priceButton {
-  min-width: 62px;
-  min-height: 32px;
-  padding: 0 10px;
-  border: 1px solid #cbd3dd;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #263445;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.priceButton:hover:not(:disabled) {
-  border-color: #93a4ba;
-  background: #f8fafc;
-}
-
-.priceButton:disabled {
-  color: #8995a4;
-}
-
 .pagination {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 10px;
   align-items: center;
-  margin-bottom: 10px;
+  margin-top: 16px;
 }
 
 .pagination button {
-  min-width: 64px;
+  min-width: 38px;
   min-height: 34px;
   padding: 0 12px;
   border: 1px solid #cbd3dd;
@@ -175,11 +164,22 @@ p {
   color: #a2adba;
 }
 
-.pagination span {
-  min-width: 86px;
+.pageNumbers {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pageNumbers span {
+  min-width: 24px;
   color: #4d5968;
-  font-variant-numeric: tabular-nums;
   text-align: center;
+}
+
+.pageNumbers .activePage {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #ffffff;
 }
 
 .notice {
@@ -201,7 +201,7 @@ p {
 
 table {
   width: 100%;
-  min-width: 1250px;
+  min-width: 880px;
   border-collapse: collapse;
 }
 
@@ -258,6 +258,20 @@ tbody tr:hover {
   font-weight: 700;
 }
 
+.nameButton {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.nameButton:hover .name {
+  color: #1f4f99;
+  text-decoration: underline;
+}
+
 .numeric {
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -280,6 +294,94 @@ tbody tr:hover {
 .empty {
   padding: 28px 16px;
   text-align: center;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.priceModal {
+  width: min(520px, 100%);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.26);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid #e7ecf2;
+}
+
+.modalHeader h2 {
+  margin: 0 0 4px;
+  color: #111827;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #cbd3dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #263445;
+  flex: 0 0 auto;
+}
+
+.iconButton:hover {
+  border-color: #93a4ba;
+  background: #f8fafc;
+}
+
+.modalState {
+  padding: 16px 20px 0;
+}
+
+.priceModal .notice {
+  margin: 16px 20px 0;
+}
+
+.priceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 20px;
+}
+
+.priceGrid div {
+  min-width: 0;
+  padding: 14px;
+  background: #f8fafc;
+}
+
+.priceGrid dt {
+  margin-bottom: 4px;
+  color: #5a6573;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.priceGrid dd {
+  margin: 0;
+  color: #111827;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
 }
 
 @keyframes spin {
@@ -307,6 +409,14 @@ tbody tr:hover {
     height: 46px;
   }
 
+  .searchControls {
+    grid-template-columns: 1fr;
+  }
+
+  .categorySelect select {
+    height: 46px;
+  }
+
   .resultBar {
     align-items: flex-start;
     flex-direction: column;
@@ -314,6 +424,11 @@ tbody tr:hover {
   }
 
   .pagination {
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .priceGrid {
+    grid-template-columns: 1fr;
   }
 }

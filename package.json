@@ -4,6 +4,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "generate:data": "node scripts/generate-etfs.mjs",
+    "fetch:holdings": ".venv/bin/python scripts/fetch_etf_holdings.py",
     "test": "node --test"
   },
   "dependencies": {

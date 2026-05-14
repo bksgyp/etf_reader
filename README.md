@@ -35,6 +35,24 @@ KIS_ENV=prod
 npm run generate:data
 ```
 
+## ETF 구성종목 갱신
+
+`pykrx`로 ETF 구성종목, 계약수, 금액, 비중을 받아 `src/data/etf_holdings.json`과 `etf_holdings.md`에 저장합니다.
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+npm run fetch:holdings
+```
+
+KRX 로그인 세션이 필요한 API라서 실행 전 `KRX_ID`, `KRX_PW` 환경변수를 설정해야 합니다. `.env`를 사용할 경우 파일은 커밋하지 마세요. 이 저장소의 `.env`는 이미 `.gitignore`에 포함되어 있습니다.
+
+특정 기준일이나 테스트용 개수 제한이 필요하면 직접 스크립트를 실행합니다.
+
+```bash
+.venv/bin/python scripts/fetch_etf_holdings.py --date 20260514 --limit 5
+```
+
 ## 검증
 
 ```bash
