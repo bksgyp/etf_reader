@@ -14,6 +14,8 @@ const searchFields: Array<keyof Etf> = [
   "기초지수명",
   "운용사",
 ];
+const pageSize = 20;
+const nameCollator = new Intl.Collator("ko-KR", { numeric: true, sensitivity: "base" });
 
 function normalize(value: string) {
   return value.trim().toLocaleLowerCase("ko-KR");
@@ -65,19 +67,37 @@ function findPrice(etf: Etf, prices: Record<string, EtfPrice>) {
   return prices[etf.단축코드] ?? prices[etf.표준코드];
 }
 
+function sortByKoreanName(left: Etf, right: Etf) {
+  return nameCollator.compare(left.한글종목약명, right.한글종목약명);
+}
+
 function App() {
   const [query, setQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [priceData, setPriceData] = useState<EtfPriceResponse | null>(null);
   const [priceError, setPriceError] = useState("");
   const [isLoadingPrices, setIsLoadingPrices] = useState(false);
-  const results = useMemo(() => typedEtfs.filter((etf) => matchesQuery(etf, query)), [query]);
+  const results = useMemo(() => typedEtfs.filter((etf) => matchesQuery(etf, query)).sort(sortByKoreanName), [query]);
+  const totalPages = Math.max(1, Math.ceil(results.length / pageSize));
+  const visibleResults = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return results.slice(startIndex, startIndex + pageSize);
+  }, [currentPage, results]);
+  const visibleCodes = useMemo(() => visibleResults.map((etf) => etf.단축코드).join(","), [visibleResults]);
+  const firstResultNumber = results.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const lastResultNumber = Math.min(currentPage * pageSize, results.length);
 
-  async function loadPrices() {
+  async function loadPrices(codes: string) {
+    if (!codes) {
+      setPriceData(null);
+      return;
+    }
+
     setIsLoadingPrices(true);
     setPriceError("");
 
     try {
-      const response = await fetch("/api/etf-prices");
+      const response = await fetch(`/api/etf-prices?codes=${encodeURIComponent(codes)}`);
 
       if (!response.ok) {
         const body = (await response.json().catch(() => null)) as { error?: string } | null;
@@ -93,8 +113,18 @@ function App() {
   }
 
   useEffect(() => {
-    void loadPrices();
-  }, []);
+    void loadPrices(visibleCodes);
+  }, [visibleCodes]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   return (
     <main className="app">
@@ -103,7 +133,7 @@ function App() {
           <h1>대한민국 ETF 검색</h1>
           <p>
             {typedEtfs.length.toLocaleString("ko-KR")}개 ETF를 코드, 이름, 지수, 운용사로 검색합니다.
-            {priceData ? ` 시세 기준일은 ${formatBasDd(priceData.basDd)}입니다.` : ""}
+            {priceData?.basDd ? ` 시세 기준일은 ${formatBasDd(priceData.basDd)}입니다.` : ""}
           </p>
         </div>
         <label className="searchBox">
@@ -121,13 +151,39 @@ function App() {
       <section className="resultBar" aria-live="polite">
         <div className="resultHeader">
           <strong>{results.length.toLocaleString("ko-KR")}</strong>
-          <span>개 검색 결과</span>
+          <span>
+            개 검색 결과
+            {results.length > 0
+              ? ` (${firstResultNumber.toLocaleString("ko-KR")}-${lastResultNumber.toLocaleString("ko-KR")}번째 표시)`
+              : ""}
+          </span>
         </div>
-        <button className="refreshButton" type="button" onClick={loadPrices} disabled={isLoadingPrices}>
+        <button
+          className="refreshButton"
+          type="button"
+          onClick={() => loadPrices(visibleCodes)}
+          disabled={isLoadingPrices}
+        >
           <RefreshCw aria-hidden="true" size={16} className={isLoadingPrices ? "spinning" : ""} />
           시세 갱신
         </button>
       </section>
+
+      <nav className="pagination" aria-label="검색 결과 페이지">
+        <button type="button" onClick={() => setCurrentPage((page) => Math.max(1, page - 1))} disabled={currentPage === 1}>
+          이전
+        </button>
+        <span>
+          {currentPage.toLocaleString("ko-KR")} / {totalPages.toLocaleString("ko-KR")}
+        </span>
+        <button
+          type="button"
+          onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+          disabled={currentPage === totalPages}
+        >
+          다음
+        </button>
+      </nav>
 
       {priceError ? <p className="notice">{priceError}</p> : null}
 
@@ -149,7 +205,7 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {results.map((etf) => {
+            {visibleResults.map((etf) => {
               const price = priceData ? findPrice(etf, priceData.prices) : undefined;
               const changeTone = price ? changeClassName(price.change) : "";
 
@@ -165,7 +221,7 @@ function App() {
                   <td className={`numeric ${changeTone}`}>
                     {price ? `${formatNumber(price.change)} / ${price.changeRate}%` : "-"}
                   </td>
-                  <td className="numeric">{price ? formatNumber(price.nav) : "-"}</td>
+                  <td className="numeric">{price?.nav ? formatNumber(price.nav) : "-"}</td>
                   <td className="numeric">{price ? formatNumber(price.volume) : "-"}</td>
                   <td>{etf.기초시장분류}</td>
                   <td>{etf.기초자산분류}</td>

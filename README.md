@@ -12,17 +12,19 @@ npm run dev
 
 `npm run dev`는 Vite 프론트엔드만 실행합니다. 서버리스 API까지 로컬에서 확인하려면 Vercel CLI의 `vercel dev`를 사용합니다.
 
-## KRX API 키
+## 한국투자증권 API 키
 
-KRX Open API의 `ETF 일별매매정보`를 조회합니다. 실시간 체결가가 아니라 최신 영업일 기준 일별 시세입니다. API 키는 브라우저에 노출하지 않고 Vercel 서버리스 함수에서만 사용합니다.
+한국투자증권 Open API의 `주식현재가 시세`를 조회합니다. API 키는 브라우저에 노출하지 않고 Vercel 서버리스 함수에서만 사용합니다.
 
 로컬 또는 Vercel 환경변수에 아래 값을 설정합니다.
 
 ```bash
-KRX_API_KEY=발급받은_KRX_OPEN_API_인증키
+KIS_APP_KEY=발급받은_한국투자증권_APP_KEY
+KIS_APP_SECRET=발급받은_한국투자증권_APP_SECRET
+KIS_ENV=prod
 ```
 
-Vercel 배포 후 `/api/etf-prices`가 최신 영업일 ETF 일별 시세를 반환합니다.
+모의투자 도메인을 쓰려면 `KIS_ENV=vts`로 설정합니다. 배포 후 `/api/etf-prices?codes=005930,069500`처럼 조회할 수 있습니다.
 
 ## 데이터 갱신
 
@@ -47,4 +49,4 @@ GitHub 저장소를 Vercel에 연결하면 Vite 프로젝트로 자동 감지됩
 - Build Command: `npm run build`
 - Output Directory: `dist`
 - Install Command: `npm install`
-- Environment Variable: `KRX_API_KEY`
+- Environment Variables: `KIS_APP_KEY`, `KIS_APP_SECRET`, `KIS_ENV`

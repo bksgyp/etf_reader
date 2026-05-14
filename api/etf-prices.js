@@ -1,109 +1,116 @@
-const KRX_ETF_DAILY_URL = "https://data-dbg.krx.co.kr/svc/apis/etp/etf_bydd_trd";
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+const KIS_PROD_DOMAIN = "https://openapi.koreainvestment.com:9443";
+const KIS_VTS_DOMAIN = "https://openapivts.koreainvestment.com:29443";
+const MAX_CODES = 20;
 
-function toKstDate(date) {
-  return new Date(date.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+function getKisDomain() {
+  return process.env.KIS_ENV === "vts" ? KIS_VTS_DOMAIN : KIS_PROD_DOMAIN;
 }
 
-function formatBasDd(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}${month}${day}`;
-}
-
-function previousMarketDates(limit) {
-  const dates = [];
-  let cursor = toKstDate(new Date());
-
-  while (dates.length < limit) {
-    const day = cursor.getDay();
-
-    if (day !== 0 && day !== 6) {
-      dates.push(formatBasDd(cursor));
-    }
-
-    cursor = new Date(cursor.getTime() - ONE_DAY_MS);
+function parseCodes(value) {
+  if (typeof value !== "string") {
+    return [];
   }
 
-  return dates;
+  return [...new Set(value.split(",").map((code) => code.trim()).filter((code) => /^\d{6}$/.test(code)))].slice(
+    0,
+    MAX_CODES,
+  );
 }
 
-function normalizePriceRow(row) {
+async function getAccessToken(domain, appKey, appSecret) {
+  const response = await fetch(`${domain}/oauth2/tokenP`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify({
+      grant_type: "client_credentials",
+      appkey: appKey,
+      appsecret: appSecret,
+    }),
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok || !data?.access_token) {
+    throw new Error(data?.msg1 || data?.error_description || `KIS token request failed: ${response.status}`);
+  }
+
+  return data.access_token;
+}
+
+function normalizePrice(code, output) {
   return {
-    basDd: row.BAS_DD,
-    code: row.ISU_SRT_CD || row.ISU_CD,
-    name: row.ISU_NM,
-    close: row.TDD_CLSPRC,
-    change: row.CMPPREVDD_PRC,
-    changeRate: row.FLUC_RT,
-    nav: row.NAV,
-    open: row.TDD_OPNPRC,
-    high: row.TDD_HGPRC,
-    low: row.TDD_LWPRC,
-    volume: row.ACC_TRDVOL,
-    tradingValue: row.ACC_TRDVAL,
-    marketCap: row.MKTCAP,
-    netAssets: row.INVSTASST_NETASST_TOTAMT,
+    basDd: "",
+    code,
+    name: output.bstp_kor_isnm || "",
+    close: output.stck_prpr || "",
+    change: output.prdy_vrss || "",
+    changeRate: output.prdy_ctrt || "",
+    nav: "",
+    open: output.stck_oprc || "",
+    high: output.stck_hgpr || "",
+    low: output.stck_lwpr || "",
+    volume: output.acml_vol || "",
+    tradingValue: output.acml_tr_pbmn || "",
+    marketCap: output.hts_avls || "",
+    netAssets: "",
   };
 }
 
-function priceKeys(row) {
-  return [row.ISU_SRT_CD, row.ISU_CD].filter(Boolean);
-}
-
-async function fetchEtfPrices(apiKey, basDd) {
-  const url = new URL(KRX_ETF_DAILY_URL);
-  url.searchParams.set("basDd", basDd);
+async function fetchPrice(domain, token, appKey, appSecret, code) {
+  const url = new URL(`${domain}/uapi/domestic-stock/v1/quotations/inquire-price`);
+  url.searchParams.set("FID_COND_MRKT_DIV_CODE", "J");
+  url.searchParams.set("FID_INPUT_ISCD", code);
 
   const response = await fetch(url, {
     headers: {
-      AUTH_KEY: apiKey,
+      "content-type": "application/json; charset=utf-8",
+      authorization: `Bearer ${token}`,
+      appkey: appKey,
+      appsecret: appSecret,
+      tr_id: "FHKST01010100",
+      custtype: "P",
     },
   });
 
-  if (!response.ok) {
-    throw new Error(`KRX API request failed: ${response.status}`);
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok || data?.rt_cd !== "0") {
+    throw new Error(data?.msg1 || `KIS price request failed for ${code}: ${response.status}`);
   }
 
-  const data = await response.json();
-  return Array.isArray(data.OutBlock_1) ? data.OutBlock_1 : [];
+  return normalizePrice(code, data.output || {});
 }
 
 export default async function handler(request, response) {
-  const apiKey = process.env.KRX_API_KEY;
+  const appKey = process.env.KIS_APP_KEY?.trim();
+  const appSecret = process.env.KIS_APP_SECRET?.trim();
+  const codes = parseCodes(request.query.codes);
 
-  if (!apiKey) {
-    response.status(500).json({ error: "KRX_API_KEY is not configured." });
+  if (!appKey || !appSecret) {
+    response.status(500).json({ error: "KIS_APP_KEY and KIS_APP_SECRET are not configured." });
     return;
   }
 
-  const requestedBasDd = typeof request.query.basDd === "string" ? request.query.basDd : "";
-  const dates = /^\d{8}$/.test(requestedBasDd) ? [requestedBasDd] : previousMarketDates(10);
+  if (codes.length === 0) {
+    response.status(400).json({ error: "codes query parameter is required." });
+    return;
+  }
 
   try {
-    for (const basDd of dates) {
-      const rows = await fetchEtfPrices(apiKey, basDd);
-      const tradableRows = rows.filter((row) => row.TDD_CLSPRC && row.TDD_CLSPRC !== "-");
+    const domain = getKisDomain();
+    const token = await getAccessToken(domain, appKey, appSecret);
+    const rows = await Promise.all(codes.map((code) => fetchPrice(domain, token, appKey, appSecret, code)));
+    const prices = Object.fromEntries(rows.map((row) => [row.code, row]));
 
-      if (tradableRows.length > 0) {
-        const prices = Object.fromEntries(
-          tradableRows.flatMap((row) => priceKeys(row).map((key) => [key, normalizePriceRow(row)])),
-        );
-
-        response.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=600");
-        response.status(200).json({
-          basDd,
-          count: tradableRows.length,
-          prices,
-        });
-        return;
-      }
-    }
-
-    response.status(404).json({ error: "No ETF price data found.", checkedDates: dates });
+    response.setHeader("Cache-Control", "s-maxage=15, stale-while-revalidate=45");
+    response.status(200).json({
+      basDd: "",
+      count: rows.length,
+      prices,
+    });
   } catch (error) {
-    response.status(502).json({ error: error instanceof Error ? error.message : "KRX API request failed." });
+    response.status(502).json({ error: error instanceof Error ? error.message : "KIS API request failed." });
   }
 }

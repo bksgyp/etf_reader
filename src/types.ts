@@ -25,14 +25,14 @@ export type EtfPrice = {
   close: string;
   change: string;
   changeRate: string;
-  nav: string;
+  nav?: string;
   open: string;
   high: string;
   low: string;
   volume: string;
   tradingValue: string;
   marketCap: string;
-  netAssets: string;
+  netAssets?: string;
 };
 
 export type EtfPriceResponse = {
