@@ -2,6 +2,61 @@ import { Search } from "lucide-react";
 import { typedEtfs, searchCategories } from "../constants";
 import type { SearchCategory } from "../constants";
 
+function AppHeader({ totalCount }: { totalCount: number }) {
+  return (
+    <div>
+      <h1>대한민국 ETF 검색</h1>
+      <p>
+        {totalCount.toLocaleString("ko-KR")}개 ETF를 시장, 운용사, 종목명으로
+        검색합니다.
+      </p>
+    </div>
+  );
+}
+
+function SearchBar({
+  query,
+  searchCategory,
+  searchPlaceholder,
+  onQueryChange,
+  onCategoryChange,
+}: {
+  query: string;
+  searchCategory: SearchCategory;
+  searchPlaceholder: string;
+  onQueryChange: (query: string) => void;
+  onCategoryChange: (category: SearchCategory) => void;
+}) {
+  return (
+    <div className="searchControls">
+      <label className="categorySelect" aria-label="검색 기준">
+        <select
+          value={searchCategory}
+          onChange={(event) =>
+            onCategoryChange(event.target.value as SearchCategory)
+          }
+        >
+          {Object.entries(searchCategories).map(([key, category]) => (
+            <option key={key} value={key}>
+              {category.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label className="searchBox">
+        <Search aria-hidden="true" size={20} />
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => onQueryChange(event.target.value)}
+          placeholder={searchPlaceholder}
+          aria-label={`${searchCategories[searchCategory].label} 검색어`}
+        />
+      </label>
+    </div>
+  );
+}
+
 export function SearchToolbar({
   query,
   searchCategory,
@@ -17,39 +72,14 @@ export function SearchToolbar({
 }) {
   return (
     <section className="toolbar" aria-label="ETF 검색">
-      <div>
-        <h1>대한민국 ETF 검색</h1>
-        <p>
-          {typedEtfs.length.toLocaleString("ko-KR")}개 ETF를 시장, 운용사,
-          종목명으로 검색합니다.
-        </p>
-      </div>
-      <div className="searchControls">
-        <label className="categorySelect" aria-label="검색 기준">
-          <select
-            value={searchCategory}
-            onChange={(event) =>
-              onCategoryChange(event.target.value as SearchCategory)
-            }
-          >
-            {Object.entries(searchCategories).map(([key, category]) => (
-              <option key={key} value={key}>
-                {category.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="searchBox">
-          <Search aria-hidden="true" size={20} />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => onQueryChange(event.target.value)}
-            placeholder={searchPlaceholder}
-            aria-label={`${searchCategories[searchCategory].label} 검색어`}
-          />
-        </label>
-      </div>
+      <AppHeader totalCount={typedEtfs.length} />
+      <SearchBar
+        query={query}
+        searchCategory={searchCategory}
+        searchPlaceholder={searchPlaceholder}
+        onQueryChange={onQueryChange}
+        onCategoryChange={onCategoryChange}
+      />
     </section>
   );
 }

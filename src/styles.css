@@ -11,6 +11,12 @@
   font-synthesis: none;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+
+  --device-select-w: 106px;
+  --device-card-p: 14px;
+  --device-card-gap: 8px;
+  --device-chip-basis: 100px;
+  --device-modal-p: 14px;
 }
 
 * {
@@ -19,6 +25,8 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 button,
@@ -196,6 +204,10 @@ p {
   border-color: #2563eb;
   background: #2563eb;
   color: #ffffff;
+}
+
+.pageInfo {
+  display: none;
 }
 
 .notice {
@@ -954,64 +966,585 @@ tbody tr:hover {
 
 @media (max-width: 760px) {
   .app {
-    width: min(100% - 20px, 1180px);
-    padding: 22px 0;
+    width: min(100% - 16px, 1180px);
+    padding: 0 0 24px;
   }
 
+  /* 검색 영역을 상단에 고정해 스크롤해도 항상 접근 가능 */
   .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 8;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 10px;
+    padding: 12px 0 10px;
+    margin-bottom: 14px;
+    background: #f6f7f9;
+    box-shadow:
+      0 1px 0 #e2e8f0,
+      0 4px 16px rgba(15, 23, 42, 0.07);
   }
 
   h1 {
-    font-size: 30px;
+    font-size: 18px;
+    margin: 0 0 2px;
+  }
+
+  /* 모바일에서 설명 텍스트 숨김 (공간 절약) */
+  .toolbar > div > p {
+    display: none;
+  }
+
+  /* 검색 카테고리 + 입력을 한 줄에 배치 */
+  .searchControls {
+    grid-template-columns: 106px 1fr;
+    gap: 8px;
   }
 
   .searchBox {
     height: 46px;
+    /* iOS 줌 방지: font-size 16px 보장 */
+    font-size: 16px;
   }
 
-  .searchControls {
-    grid-template-columns: 1fr;
+  .searchBox input {
+    font-size: 16px;
   }
 
   .categorySelect select {
     height: 46px;
+    font-size: 16px;
+    padding: 0 8px;
   }
 
   .resultBar {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
   }
 
-  .pagination {
-    justify-content: center;
+  .resultHeader {
+    align-items: baseline;
+    flex-direction: row;
+    gap: 4px;
     flex-wrap: wrap;
   }
 
+  .resultHeader strong {
+    font-size: 16px;
+  }
+
+  .resultHeader span {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .clearFiltersButton {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+
+  .tableWrap {
+    border: 0;
+    background: transparent;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  thead {
+    position: static;
+  }
+
+  /* 필터 칩 스크롤 영역 - 우측 페이드 힌트 */
+  thead tr {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    padding-right: 24px;
+    margin-bottom: 10px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+    mask-image: linear-gradient(to right, black 80%, transparent 100%);
+  }
+
+  thead tr::-webkit-scrollbar {
+    display: none;
+  }
+
+  th {
+    flex: 0 0 100px;
+    position: static;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  /* 필터 칩 터치 영역 확보 (최소 44px) */
+  .columnHeader {
+    min-height: 44px;
+    padding: 0 10px;
+    border: 1px solid #cbd3dd;
+    border-radius: 22px;
+    background: #ffffff;
+    font-size: 13px;
+  }
+
+  .columnHeader > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .filterButton {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* 필터 팝오버: 화면 중앙 하단 */
+  .filterPopover {
+    position: fixed;
+    top: auto;
+    bottom: 80px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    max-height: min(320px, calc(100dvh - 160px));
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.24);
+  }
+
+  .filterCheckboxItem {
+    padding: 10px 12px;
+    font-size: 15px;
+    min-height: 44px;
+  }
+
+  tbody {
+    display: grid;
+    gap: 8px;
+  }
+
+  /* ETF 카드 레이아웃 */
+  tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 12px;
+    padding: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    /* 탭 피드백 */
+    -webkit-tap-highlight-color: rgba(37, 99, 235, 0.06);
+    transition:
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  tbody tr:hover,
+  tbody tr:focus {
+    border-color: #93a4ba;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.09);
+    outline: none;
+  }
+
+  td {
+    display: grid;
+    gap: 2px;
+    align-items: start;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+
+  /* ETF 이름 + 과세: 전체 너비 */
+  td:first-child,
+  td:nth-child(7) {
+    grid-column: 1 / -1;
+  }
+
+  td:first-child::before {
+    display: none;
+  }
+
+  /* 라벨 스타일 개선 */
+  td::before {
+    color: #9ca3af;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  td:nth-child(1)::before {
+    content: "ETF";
+  }
+
+  td:nth-child(2)::before {
+    content: "코드";
+  }
+
+  td:nth-child(3)::before {
+    content: "운용사";
+  }
+
+  td:nth-child(4)::before {
+    content: "시장";
+  }
+
+  td:nth-child(5)::before {
+    content: "자산";
+  }
+
+  td:nth-child(6)::before {
+    content: "총보수";
+  }
+
+  td:nth-child(7)::before {
+    content: "과세유형";
+  }
+
+  .name {
+    font-size: 15px;
+  }
+
+  .fullName {
+    max-width: none;
+    white-space: normal;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* 페이지네이션: 이전/다음 + 페이지 인디케이터만 */
+  .pagination {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .pageNumbers {
+    justify-content: center;
+    flex: 1;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  /* 소규모 화면: 페이지 번호 수 제한 (최대 5개 표시) */
+  .pageNumbers button:nth-child(n + 6) {
+    display: none;
+  }
+
+  .pagination button {
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+  }
+
+  .modalOverlay {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .priceModal {
+    width: 100vw;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* 모달 헤더: 타이틀 + 액션을 한 줄로 */
+  .modalHeader {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #ffffff;
+    border-bottom: 1px solid #e7ecf2;
+  }
+
+  .modalHeader > div:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .modalHeader h2 {
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+
+  .modalHeader p {
+    font-size: 12px;
+  }
+
+  .modalActions {
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  .actionButton {
+    min-height: 40px;
+    padding: 0 10px;
+  }
+
+  .iconButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .heroZone {
+    align-items: flex-end;
+    flex-direction: row;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .heroRight {
+    width: auto;
+    text-align: right;
+  }
+
+  .heroPrice {
+    font-size: 28px;
+    letter-spacing: -0.5px;
+  }
+
+  .heroNav {
+    font-size: 16px;
+  }
+
+  .modalState {
+    padding: 12px 14px 0;
+  }
+
+  .priceModal .notice {
+    margin: 12px 14px 0;
+  }
+
   .infoGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .infoGrid dd {
+    overflow-wrap: anywhere;
+    font-size: 13px;
+  }
+
+  .holdingsPanel {
+    padding: 0 14px 20px;
+  }
+
+  .holdingsHeader {
+    align-items: center;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .holdingsHeader h3 {
+    font-size: 16px;
   }
 
   .holdingCard {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) 72px;
+    min-height: 64px;
+    padding: 10px 12px;
   }
 
   .holdingsChartWrap {
     grid-template-columns: 1fr;
     justify-items: center;
+    padding: 14px;
+    gap: 14px;
   }
 
   .pieChart {
-    width: min(156px, 100%);
+    width: min(140px, 100%);
   }
 
   .holdingCardMetric {
-    justify-items: start;
+    justify-items: end;
   }
 
   .holdingsList {
     grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .holdingPagination {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+
+  .holdingPagination button {
+    min-height: 44px;
+    min-width: 72px;
+  }
+
+  .holdingPagination span {
+    font-size: 13px;
+  }
+}
+
+/* iPhone 13 mini — 가장 컴팩트 */
+@media (max-width: 375px) {
+  :root {
+    --device-select-w: 94px;
+    --device-card-p: 11px;
+    --device-card-gap: 6px;
+    --device-chip-basis: 90px;
+    --device-modal-p: 12px;
+  }
+
+  h1 {
+    font-size: 17px;
+  }
+
+  .name {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .fullName {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .searchControls {
+    grid-template-columns: var(--device-select-w) 1fr;
+  }
+
+  .categorySelect select {
+    padding: 0 6px;
+    font-size: 15px;
+  }
+
+  tbody tr {
+    padding: var(--device-card-p);
+    gap: 7px 9px;
+  }
+
+  tbody {
+    gap: var(--device-card-gap);
+  }
+
+  /* iPhone 13 mini: 페이지 번호 숨기고 현재/전체 텍스트로 대체 */
+  .pageNumbers {
+    display: none;
+  }
+  .pageInfo {
+    display: block;
+    font-size: 13px;
+    color: #4d5968;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    min-width: 64px;
+  }
+
+  /* iPhone 13 mini: 모달 액션 버튼 텍스트 숨김 */
+  .actionLabel {
+    display: none;
+  }
+  .modalHeader {
+    padding: 10px var(--device-modal-p);
+  }
+  .heroPrice {
+    font-size: 26px;
+  }
+}
+
+/* iPhone 16 Pro — 표준 */
+@media (min-width: 376px) and (max-width: 393px) {
+  :root {
+    --device-select-w: 100px;
+    --device-card-p: 12px;
+    --device-card-gap: 7px;
+    --device-chip-basis: 96px;
+    --device-modal-p: 13px;
+  }
+  h1 {
+    font-size: 18px;
+  }
+  .searchControls {
+    grid-template-columns: var(--device-select-w) 1fr;
+  }
+  tbody tr {
+    padding: var(--device-card-p);
+  }
+  tbody {
+    gap: var(--device-card-gap);
+  }
+  /* iPhone 16 Pro: 페이지 번호 최대 3개 */
+  .pageNumbers button:nth-child(n + 4) {
+    display: none;
+  }
+  .pageNumbers span {
+    display: none;
+  }
+
+  /* iPhone 16 Pro: 표준 모달 패딩 */
+  .modalHeader {
+    padding: 11px var(--device-modal-p);
+  }
+}
+
+/* Samsung Galaxy S26 — 여유로운 */
+@media (min-width: 394px) and (max-width: 760px) {
+  :root {
+    --device-select-w: 110px;
+    --device-card-p: 14px;
+    --device-card-gap: 9px;
+    --device-chip-basis: 104px;
+    --device-modal-p: 15px;
+  }
+  h1 {
+    font-size: 19px;
+  }
+  .searchControls {
+    grid-template-columns: var(--device-select-w) 1fr;
+  }
+  tbody tr {
+    padding: var(--device-card-p);
+  }
+  tbody {
+    gap: var(--device-card-gap);
+  }
+  .holdingsList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .infoGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Galaxy S26: 여유로운 모달 */
+  .modalHeader {
+    padding: 13px var(--device-modal-p);
+  }
+  .heroPrice {
+    font-size: 30px;
   }
 }

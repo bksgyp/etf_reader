@@ -39,6 +39,9 @@ export function NumberPagination({
           ),
         )}
       </div>
+      <span className="pageInfo">
+        {currentPage} / {totalPages}
+      </span>
       <button
         type="button"
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}

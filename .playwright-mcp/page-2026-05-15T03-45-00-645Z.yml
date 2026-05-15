@@ -1,0 +1,286 @@
+- main [ref=e3]:
+  - region "ETF 검색" [ref=e4]:
+    - heading "대한민국 ETF 검색" [level=1] [ref=e6]
+    - generic [ref=e7]:
+      - generic "검색 기준" [ref=e8]:
+        - combobox "검색 기준" [ref=e9]:
+          - option "시장"
+          - option "운용사"
+          - option "종목명" [selected]
+          - option "구성종목"
+      - generic [ref=e10]:
+        - img [ref=e11]
+        - searchbox "종목명 검색어" [ref=e14]
+  - generic [ref=e16]:
+    - strong [ref=e17]: 1,107
+    - generic [ref=e18]: 개 검색 결과 (1-20번째 표시)
+  - region "ETF 검색 결과" [ref=e19]:
+    - table [ref=e20]:
+      - rowgroup [ref=e21]:
+        - row "종목 종목 필터 열기 코드 코드 필터 열기 운용사 운용사 필터 열기 시장 시장 필터 열기 자산 자산 필터 열기 총보수 총보수 필터 열기 과세유형 과세유형 필터 열기" [ref=e22]:
+          - columnheader "종목 종목 필터 열기" [ref=e23]:
+            - generic [ref=e24]:
+              - generic [ref=e25]: 종목
+              - button "종목 필터 열기" [ref=e26] [cursor=pointer]:
+                - img [ref=e27]
+          - columnheader "코드 코드 필터 열기" [ref=e29]:
+            - generic [ref=e30]:
+              - generic [ref=e31]: 코드
+              - button "코드 필터 열기" [ref=e32] [cursor=pointer]:
+                - img [ref=e33]
+          - columnheader "운용사 운용사 필터 열기" [ref=e35]:
+            - generic [ref=e36]:
+              - generic [ref=e37]: 운용사
+              - button "운용사 필터 열기" [ref=e38] [cursor=pointer]:
+                - img [ref=e39]
+          - columnheader "시장 시장 필터 열기" [ref=e41]:
+            - generic [ref=e42]:
+              - generic [ref=e43]: 시장
+              - button "시장 필터 열기" [ref=e44] [cursor=pointer]:
+                - img [ref=e45]
+          - columnheader "자산 자산 필터 열기" [ref=e47]:
+            - generic [ref=e48]:
+              - generic [ref=e49]: 자산
+              - button "자산 필터 열기" [ref=e50] [cursor=pointer]:
+                - img [ref=e51]
+          - columnheader "총보수 총보수 필터 열기" [ref=e53]:
+            - generic [ref=e54]:
+              - generic [ref=e55]: 총보수
+              - button "총보수 필터 열기" [ref=e56] [cursor=pointer]:
+                - img [ref=e57]
+          - columnheader "과세유형 과세유형 필터 열기" [ref=e59]:
+            - generic [ref=e60]:
+              - generic [ref=e61]: 과세유형
+              - button "과세유형 필터 열기" [ref=e62] [cursor=pointer]:
+                - img [ref=e63]
+      - rowgroup [ref=e65]:
+        - button "1Q 200액티브 코스피 200 코드 451060 운용사 하나자산운용 시장 국내 자산 주식 총보수 0.010% 과세유형 배당소득세(보유기간과세)" [ref=e66] [cursor=pointer]:
+          - cell "1Q 200액티브 코스피 200" [ref=e67]:
+            - generic [ref=e68]:
+              - generic [ref=e69]: 1Q 200액티브
+              - generic [ref=e70]: 코스피 200
+          - cell "코드 451060" [ref=e71]
+          - cell "운용사 하나자산운용" [ref=e72]
+          - cell "시장 국내" [ref=e73]
+          - cell "자산 주식" [ref=e74]
+          - cell "총보수 0.010%" [ref=e75]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e76]
+        - button "1Q 200채권혼합50액티브 코스피 200 단기국공채 혼합지수 코드 0184E0 운용사 하나자산운용 시장 국내 자산 혼합자산 총보수 0.400% 과세유형 배당소득세(보유기간과세)" [ref=e77] [cursor=pointer]:
+          - cell "1Q 200채권혼합50액티브 코스피 200 단기국공채 혼합지수" [ref=e78]:
+            - generic [ref=e79]:
+              - generic [ref=e80]: 1Q 200채권혼합50액티브
+              - generic [ref=e81]: 코스피 200 단기국공채 혼합지수
+          - cell "코드 0184E0" [ref=e82]
+          - cell "운용사 하나자산운용" [ref=e83]
+          - cell "시장 국내" [ref=e84]
+          - cell "자산 혼합자산" [ref=e85]
+          - cell "총보수 0.400%" [ref=e86]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e87]
+        - button "1Q 단기금융채액티브 MK 머니마켓 지수(총수익) 코드 463290 운용사 하나자산운용 시장 국내 자산 채권 총보수 0.080% 과세유형 배당소득세(보유기간과세)" [ref=e88] [cursor=pointer]:
+          - cell "1Q 단기금융채액티브 MK 머니마켓 지수(총수익)" [ref=e89]:
+            - generic [ref=e90]:
+              - generic [ref=e91]: 1Q 단기금융채액티브
+              - generic [ref=e92]: MK 머니마켓 지수(총수익)
+          - cell "코드 463290" [ref=e93]
+          - cell "운용사 하나자산운용" [ref=e94]
+          - cell "시장 국내" [ref=e95]
+          - cell "자산 채권" [ref=e96]
+          - cell "총보수 0.080%" [ref=e97]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e98]
+        - button "1Q 단기특수은행채액티브 KIS 단기특수은행채 지수(총수익) 코드 0131W0 운용사 하나자산운용 시장 국내 자산 채권 총보수 0.010% 과세유형 배당소득세(보유기간과세)" [ref=e99] [cursor=pointer]:
+          - cell "1Q 단기특수은행채액티브 KIS 단기특수은행채 지수(총수익)" [ref=e100]:
+            - generic [ref=e101]:
+              - generic [ref=e102]: 1Q 단기특수은행채액티브
+              - generic [ref=e103]: KIS 단기특수은행채 지수(총수익)
+          - cell "코드 0131W0" [ref=e104]
+          - cell "운용사 하나자산운용" [ref=e105]
+          - cell "시장 국내" [ref=e106]
+          - cell "자산 채권" [ref=e107]
+          - cell "총보수 0.010%" [ref=e108]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e109]
+        - button "1Q 머니마켓액티브 KIS-하나 MMF 지수(총수익) 코드 479080 운용사 하나자산운용 시장 국내 자산 채권 총보수 0.050% 과세유형 배당소득세(보유기간과세)" [ref=e110] [cursor=pointer]:
+          - cell "1Q 머니마켓액티브 KIS-하나 MMF 지수(총수익)" [ref=e111]:
+            - generic [ref=e112]:
+              - generic [ref=e113]: 1Q 머니마켓액티브
+              - generic [ref=e114]: KIS-하나 MMF 지수(총수익)
+          - cell "코드 479080" [ref=e115]
+          - cell "운용사 하나자산운용" [ref=e116]
+          - cell "시장 국내" [ref=e117]
+          - cell "자산 채권" [ref=e118]
+          - cell "총보수 0.050%" [ref=e119]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e120]
+        - button "1Q 미국나스닥100 NASDAQ 100 코드 0069M0 운용사 하나자산운용 시장 해외 자산 주식 총보수 0.005% 과세유형 배당소득세(보유기간과세)" [ref=e121] [cursor=pointer]:
+          - cell "1Q 미국나스닥100 NASDAQ 100" [ref=e122]:
+            - generic [ref=e123]:
+              - generic [ref=e124]: 1Q 미국나스닥100
+              - generic [ref=e125]: NASDAQ 100
+          - cell "코드 0069M0" [ref=e126]
+          - cell "운용사 하나자산운용" [ref=e127]
+          - cell "시장 해외" [ref=e128]
+          - cell "자산 주식" [ref=e129]
+          - cell "총보수 0.005%" [ref=e130]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e131]
+        - button "1Q 미국나스닥100미국채혼합50액티브 Nasdaq-100 US T-Bills 0-6 Month 50/50 Index 코드 0111P0 운용사 하나자산운용 시장 해외 자산 혼합자산 총보수 0.050% 과세유형 배당소득세(보유기간과세)" [ref=e132] [cursor=pointer]:
+          - cell "1Q 미국나스닥100미국채혼합50액티브 Nasdaq-100 US T-Bills 0-6 Month 50/50 Index" [ref=e133]:
+            - generic [ref=e134]:
+              - generic [ref=e135]: 1Q 미국나스닥100미국채혼합50액티브
+              - generic [ref=e136]: Nasdaq-100 US T-Bills 0-6 Month 50/50 Index
+          - cell "코드 0111P0" [ref=e137]
+          - cell "운용사 하나자산운용" [ref=e138]
+          - cell "시장 해외" [ref=e139]
+          - cell "자산 혼합자산" [ref=e140]
+          - cell "총보수 0.050%" [ref=e141]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e142]
+        - button "1Q 미국메디컬AI KEDI 미국메디컬AI 지수 코드 0083S0 운용사 하나자산운용 시장 해외 자산 주식 총보수 0.490% 과세유형 배당소득세(보유기간과세)" [ref=e143] [cursor=pointer]:
+          - cell "1Q 미국메디컬AI KEDI 미국메디컬AI 지수" [ref=e144]:
+            - generic [ref=e145]:
+              - generic [ref=e146]: 1Q 미국메디컬AI
+              - generic [ref=e147]: KEDI 미국메디컬AI 지수
+          - cell "코드 0083S0" [ref=e148]
+          - cell "운용사 하나자산운용" [ref=e149]
+          - cell "시장 해외" [ref=e150]
+          - cell "자산 주식" [ref=e151]
+          - cell "총보수 0.490%" [ref=e152]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e153]
+        - button "1Q 미국배당TOP30 Solactive U.S. Dividend TOP 30 Index PR 코드 0004G0 운용사 하나자산운용 시장 해외 자산 주식 총보수 0.100% 과세유형 배당소득세(보유기간과세)" [ref=e154] [cursor=pointer]:
+          - cell "1Q 미국배당TOP30 Solactive U.S. Dividend TOP 30 Index PR" [ref=e155]:
+            - generic [ref=e156]:
+              - generic [ref=e157]: 1Q 미국배당TOP30
+              - generic [ref=e158]: Solactive U.S. Dividend TOP 30 Index PR
+          - cell "코드 0004G0" [ref=e159]
+          - cell "운용사 하나자산운용" [ref=e160]
+          - cell "시장 해외" [ref=e161]
+          - cell "자산 주식" [ref=e162]
+          - cell "총보수 0.100%" [ref=e163]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e164]
+        - button "1Q 미국우주항공테크 Akros 미국우주항공테크 지수 코드 0131V0 운용사 하나자산운용 시장 해외 자산 주식 총보수 0.490% 과세유형 배당소득세(보유기간과세)" [ref=e165] [cursor=pointer]:
+          - cell "1Q 미국우주항공테크 Akros 미국우주항공테크 지수" [ref=e166]:
+            - generic [ref=e167]:
+              - generic [ref=e168]: 1Q 미국우주항공테크
+              - generic [ref=e169]: Akros 미국우주항공테크 지수
+          - cell "코드 0131V0" [ref=e170]
+          - cell "운용사 하나자산운용" [ref=e171]
+          - cell "시장 해외" [ref=e172]
+          - cell "자산 주식" [ref=e173]
+          - cell "총보수 0.490%" [ref=e174]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e175]
+        - button "1Q 미국S&P500 S&P 500 코드 0026S0 운용사 하나자산운용 시장 해외 자산 주식 총보수 0.005% 과세유형 배당소득세(보유기간과세)" [ref=e176] [cursor=pointer]:
+          - cell "1Q 미국S&P500 S&P 500" [ref=e177]:
+            - generic [ref=e178]:
+              - generic [ref=e179]: 1Q 미국S&P500
+              - generic [ref=e180]: S&P 500
+          - cell "코드 0026S0" [ref=e181]
+          - cell "운용사 하나자산운용" [ref=e182]
+          - cell "시장 해외" [ref=e183]
+          - cell "자산 주식" [ref=e184]
+          - cell "총보수 0.005%" [ref=e185]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e186]
+        - button "1Q 미국S&P500미국채혼합50액티브 S&P 500 and Short-Term Treasury 50/50 Blend Index 코드 0052S0 운용사 하나자산운용 시장 해외 자산 혼합자산 총보수 0.150% 과세유형 배당소득세(보유기간과세)" [ref=e187] [cursor=pointer]:
+          - cell "1Q 미국S&P500미국채혼합50액티브 S&P 500 and Short-Term Treasury 50/50 Blend Index" [ref=e188]:
+            - generic [ref=e189]:
+              - generic [ref=e190]: 1Q 미국S&P500미국채혼합50액티브
+              - generic [ref=e191]: S&P 500 and Short-Term Treasury 50/50 Blend Index
+          - cell "코드 0052S0" [ref=e192]
+          - cell "운용사 하나자산운용" [ref=e193]
+          - cell "시장 해외" [ref=e194]
+          - cell "자산 혼합자산" [ref=e195]
+          - cell "총보수 0.150%" [ref=e196]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e197]
+        - button "1Q 샤오미밸류체인액티브 Solactive-KEDI Xiaomi Focus China Tech Index 코드 0094X0 운용사 하나자산운용 시장 해외 자산 주식 총보수 0.490% 과세유형 배당소득세(보유기간과세)" [ref=e198] [cursor=pointer]:
+          - cell "1Q 샤오미밸류체인액티브 Solactive-KEDI Xiaomi Focus China Tech Index" [ref=e199]:
+            - generic [ref=e200]:
+              - generic [ref=e201]: 1Q 샤오미밸류체인액티브
+              - generic [ref=e202]: Solactive-KEDI Xiaomi Focus China Tech Index
+          - cell "코드 0094X0" [ref=e203]
+          - cell "운용사 하나자산운용" [ref=e204]
+          - cell "시장 해외" [ref=e205]
+          - cell "자산 주식" [ref=e206]
+          - cell "총보수 0.490%" [ref=e207]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e208]
+        - button "1Q 은액티브 Bloomberg Blended Silver Spot USD index 코드 0172V0 운용사 하나자산운용 시장 해외 자산 원자재 총보수 0.300% 과세유형 배당소득세(보유기간과세)" [ref=e209] [cursor=pointer]:
+          - cell "1Q 은액티브 Bloomberg Blended Silver Spot USD index" [ref=e210]:
+            - generic [ref=e211]:
+              - generic [ref=e212]: 1Q 은액티브
+              - generic [ref=e213]: Bloomberg Blended Silver Spot USD index
+          - cell "코드 0172V0" [ref=e214]
+          - cell "운용사 하나자산운용" [ref=e215]
+          - cell "시장 해외" [ref=e216]
+          - cell "자산 원자재" [ref=e217]
+          - cell "총보수 0.300%" [ref=e218]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e219]
+        - button "1Q 종합채권(AA-이상)액티브 KIS 종합채권형 지수(AA-이상)(총수익) 코드 0017Y0 운용사 하나자산운용 시장 국내 자산 채권 총보수 0.025% 과세유형 배당소득세(보유기간과세)" [ref=e220] [cursor=pointer]:
+          - cell "1Q 종합채권(AA-이상)액티브 KIS 종합채권형 지수(AA-이상)(총수익)" [ref=e221]:
+            - generic [ref=e222]:
+              - generic [ref=e223]: 1Q 종합채권(AA-이상)액티브
+              - generic [ref=e224]: KIS 종합채권형 지수(AA-이상)(총수익)
+          - cell "코드 0017Y0" [ref=e225]
+          - cell "운용사 하나자산운용" [ref=e226]
+          - cell "시장 국내" [ref=e227]
+          - cell "자산 채권" [ref=e228]
+          - cell "총보수 0.025%" [ref=e229]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e230]
+        - button "1Q 중단기회사채(A-이상)액티브 KEDI 중단기크레딧플러스채권(AAA~A-)지수(총수익) 코드 0052T0 운용사 하나자산운용 시장 국내 자산 채권 총보수 0.050% 과세유형 배당소득세(보유기간과세)" [ref=e231] [cursor=pointer]:
+          - cell "1Q 중단기회사채(A-이상)액티브 KEDI 중단기크레딧플러스채권(AAA~A-)지수(총수익)" [ref=e232]:
+            - generic [ref=e233]:
+              - generic [ref=e234]: 1Q 중단기회사채(A-이상)액티브
+              - generic [ref=e235]: KEDI 중단기크레딧플러스채권(AAA~A-)지수(총수익)
+          - cell "코드 0052T0" [ref=e236]
+          - cell "운용사 하나자산운용" [ref=e237]
+          - cell "시장 국내" [ref=e238]
+          - cell "자산 채권" [ref=e239]
+          - cell "총보수 0.050%" [ref=e240]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e241]
+        - button "1Q 코리아밸류업 코리아 밸류업 지수 코드 495330 운용사 하나자산운용 시장 국내 자산 주식 총보수 0.020% 과세유형 비과세" [ref=e242] [cursor=pointer]:
+          - cell "1Q 코리아밸류업 코리아 밸류업 지수" [ref=e243]:
+            - generic [ref=e244]:
+              - generic [ref=e245]: 1Q 코리아밸류업
+              - generic [ref=e246]: 코리아 밸류업 지수
+          - cell "코드 495330" [ref=e247]
+          - cell "운용사 하나자산운용" [ref=e248]
+          - cell "시장 국내" [ref=e249]
+          - cell "자산 주식" [ref=e250]
+          - cell "총보수 0.020%" [ref=e251]
+          - cell "과세유형 비과세" [ref=e252]
+        - button "1Q 코스닥150채권혼합50액티브 코스닥 150 단기국공채 혼합지수 코드 0186S0 운용사 하나자산운용 시장 국내 자산 혼합자산 총보수 0.630% 과세유형 배당소득세(보유기간과세)" [ref=e253] [cursor=pointer]:
+          - cell "1Q 코스닥150채권혼합50액티브 코스닥 150 단기국공채 혼합지수" [ref=e254]:
+            - generic [ref=e255]:
+              - generic [ref=e256]: 1Q 코스닥150채권혼합50액티브
+              - generic [ref=e257]: 코스닥 150 단기국공채 혼합지수
+          - cell "코드 0186S0" [ref=e258]
+          - cell "운용사 하나자산운용" [ref=e259]
+          - cell "시장 국내" [ref=e260]
+          - cell "자산 혼합자산" [ref=e261]
+          - cell "총보수 0.630%" [ref=e262]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e263]
+        - button "1Q 현대차그룹채권(A+이상)&국고통안 KIS 하나 현대차그룹채권(A+이상)&국고통안 총수익지수 코드 492500 운용사 하나자산운용 시장 국내 자산 채권 총보수 0.100% 과세유형 배당소득세(보유기간과세)" [ref=e264] [cursor=pointer]:
+          - cell "1Q 현대차그룹채권(A+이상)&국고통안 KIS 하나 현대차그룹채권(A+이상)&국고통안 총수익지수" [ref=e265]:
+            - generic [ref=e266]:
+              - generic [ref=e267]: 1Q 현대차그룹채권(A+이상)&국고통안
+              - generic [ref=e268]: KIS 하나 현대차그룹채권(A+이상)&국고통안 총수익지수
+          - cell "코드 492500" [ref=e269]
+          - cell "운용사 하나자산운용" [ref=e270]
+          - cell "시장 국내" [ref=e271]
+          - cell "자산 채권" [ref=e272]
+          - cell "총보수 0.100%" [ref=e273]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e274]
+        - button "1Q CD금리액티브(합성) KIS 하나 CD금리 총수익지수 코드 491610 운용사 하나자산운용 시장 국내 자산 기타 총보수 0.020% 과세유형 배당소득세(보유기간과세)" [ref=e275] [cursor=pointer]:
+          - cell "1Q CD금리액티브(합성) KIS 하나 CD금리 총수익지수" [ref=e276]:
+            - generic [ref=e277]:
+              - generic [ref=e278]: 1Q CD금리액티브(합성)
+              - generic [ref=e279]: KIS 하나 CD금리 총수익지수
+          - cell "코드 491610" [ref=e280]
+          - cell "운용사 하나자산운용" [ref=e281]
+          - cell "시장 국내" [ref=e282]
+          - cell "자산 기타" [ref=e283]
+          - cell "총보수 0.020%" [ref=e284]
+          - cell "과세유형 배당소득세(보유기간과세)" [ref=e285]
+  - navigation "검색 결과 페이지" [ref=e286]:
+    - button "이전" [disabled] [ref=e287]
+    - generic [ref=e288]:
+      - button "1" [ref=e289] [cursor=pointer]
+      - button "2" [ref=e290] [cursor=pointer]
+      - button "3" [ref=e291] [cursor=pointer]
+      - button "4" [ref=e292] [cursor=pointer]
+      - button "5" [ref=e293] [cursor=pointer]
+      - generic [ref=e294]: ...
+    - button "다음" [ref=e295] [cursor=pointer]

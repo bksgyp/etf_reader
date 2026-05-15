@@ -141,7 +141,9 @@ export function PriceModal({
               disabled={isSelectedLoading}
             >
               <RefreshCw aria-hidden="true" size={18} />
-              {isSelectedLoading ? "갱신 중" : "시세 갱신"}
+              <span className="actionLabel">
+                {isSelectedLoading ? "갱신 중" : "시세 갱신"}
+              </span>
             </button>
             <button
               className="iconButton"
